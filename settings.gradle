@@ -2,5 +2,5 @@ rootProject.name = 'blog'
 
 include 'api'
 include 'common'
-include 'domain'
+include 'core'
 
