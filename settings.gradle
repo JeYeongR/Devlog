@@ -1,4 +1,4 @@
-rootProject.name = 'blog'
+rootProject.name = 'devlog'
 
 include 'api'
 include 'common'
