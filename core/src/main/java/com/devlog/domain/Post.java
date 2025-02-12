@@ -1,4 +1,4 @@
-package com.devlog.domain.post;
+package com.devlog.domain;
 
 import java.time.LocalDateTime;
 
@@ -30,7 +30,7 @@ public class Post {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private VisibilityStatus visibilityStatus;
+	private PostVisibilityStatus visibilityStatus;
 
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;

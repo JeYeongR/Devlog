@@ -1,9 +1,6 @@
-package com.devlog.domain.comment;
+package com.devlog.domain;
 
 import java.time.LocalDateTime;
-
-import com.devlog.domain.post.Post;
-import com.devlog.domain.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

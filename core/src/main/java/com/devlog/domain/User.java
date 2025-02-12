@@ -1,4 +1,4 @@
-package com.devlog.domain.user;
+package com.devlog.domain;
 
 import java.time.LocalDateTime;
 
@@ -27,7 +27,7 @@ public class User {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private Role role;
+	private UserRole role;
 
 	@Column(length = 20, nullable = false)
 	private String nickname;
