@@ -3,4 +3,5 @@ rootProject.name = 'devlog'
 include 'api'
 include 'common'
 include 'core'
+include 'infra'
 
