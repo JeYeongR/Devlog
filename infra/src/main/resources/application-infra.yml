@@ -20,7 +20,5 @@ external:
   github:
     url: https://github.com/login/oauth/access_token
     headers:
-      #      client-id: ${GITHUB_API_CLIENT_ID}
-      #      client-secret: ${GITHUB_API_CLIENT_SECRET}
-      client-id: Ov23li4nGa9BQUD7jOUz
-      client-secret: 1359bb8d6b4cc975f069794e22b06d7e2d5ac099
+      client-id: ${GITHUB_API_CLIENT_ID}
+      client-secret: ${GITHUB_API_CLIENT_SECRET}
