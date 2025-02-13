@@ -1,4 +1,4 @@
-package com.devlog.repository.user;
+package com.devlog.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

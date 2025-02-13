@@ -18,7 +18,8 @@ spring:
         format_sql: true
 external:
   github:
-    url: https://github.com/login/oauth/access_token
+    oauth-url: https://github.com/login/oauth/access_token
+    api-url: https://api.github.com/user
     headers:
       client-id: ${GITHUB_API_CLIENT_ID}
       client-secret: ${GITHUB_API_CLIENT_SECRET}

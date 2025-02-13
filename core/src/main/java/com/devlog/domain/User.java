@@ -45,4 +45,16 @@ public class User {
 
 	@Column(nullable = false)
 	private LocalDateTime modifiedAt;
+
+	public static User create(String email, String nickname, String socialProviderId, String profileImageUrl) {
+		User user = new User();
+		user.email = email;
+		user.role = UserRole.USER;
+		user.nickname = nickname;
+		user.socialProviderId = socialProviderId;
+		user.profileImageUrl = profileImageUrl;
+		user.createdAt = LocalDateTime.now();
+		user.modifiedAt = user.createdAt;
+		return user;
+	}
 }

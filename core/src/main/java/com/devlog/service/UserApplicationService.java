@@ -2,8 +2,6 @@ package com.devlog.service;
 
 import org.springframework.stereotype.Service;
 
-import com.devlog.external.github.GithubClient;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,10 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UserApplicationService {
 
-	private final GithubClient githubClient;
+	private final UserCommandService userCommandService;
 
 	public void login(String code) {
-		System.out.println("code: " + code);
-		githubClient.getAccessToken(code);
+		userCommandService.login(code);
 	}
 }

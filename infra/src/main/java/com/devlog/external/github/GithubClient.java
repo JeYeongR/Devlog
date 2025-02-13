@@ -1,6 +1,9 @@
 package com.devlog.external.github;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -8,8 +11,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 public class GithubClient {
 
-	@Value("${external.github.url}")
-	private String githubUrl;
+	@Value("${external.github.oauth-url}")
+	private String githubOauthUrl;
 
 	@Value("${external.github.headers.client-id}")
 	private String githubClientId;
@@ -17,26 +20,42 @@ public class GithubClient {
 	@Value("${external.github.headers.client-secret}")
 	private String githubClientSecret;
 
+	@Value("${external.github.api-url}")
+	private String githubApiUrl;
+
 	private final RestClient restClient;
 
 	public GithubClient() {
 		this.restClient = RestClient.create();
 	}
 
-	public String getAccessToken(String code) {
-		String uri = UriComponentsBuilder.fromHttpUrl(githubUrl)
+	private String getAccessToken(String code) {
+		String uri = UriComponentsBuilder.fromUriString(githubOauthUrl)
 			.queryParam("client_id", githubClientId)
 			.queryParam("client_secret", githubClientSecret)
 			.queryParam("code", code)
 			.toUriString();
 
-		String body = restClient.get()
+		AccessTokenResponse response = restClient.get()
 			.uri(uri)
+			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()
-			.body(String.class);
+			.body(AccessTokenResponse.class);
 
-		// TODO 디비에 유저 정보 저장하고 토큰 발급 해주기
-		System.out.println(body);
-		return null;
+		return Objects.requireNonNull(response).accessToken();
+	}
+
+	public OauthUserResponse getUserInfo(String code) {
+		String accessToken = getAccessToken(code);
+
+		String uri = UriComponentsBuilder.fromUriString(githubApiUrl)
+			.toUriString();
+
+		return restClient.get()
+			.uri(uri)
+			.header("Authorization", "token " + accessToken)
+			.accept(MediaType.APPLICATION_JSON)
+			.retrieve()
+			.body(OauthUserResponse.class);
 	}
 }
