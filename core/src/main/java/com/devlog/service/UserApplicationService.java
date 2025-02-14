@@ -2,6 +2,8 @@ package com.devlog.service;
 
 import org.springframework.stereotype.Service;
 
+import com.devlog.domain.Token;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +14,7 @@ public class UserApplicationService {
 
 	private final UserCommandService userCommandService;
 
-	public void login(String code) {
-		userCommandService.login(code);
+	public Token login(String code) {
+		return userCommandService.login(code);
 	}
 }

@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record OauthUserResponse(
 
-	String login,
+	@JsonProperty("login")
+	String nickname,
 
-	String id,
+	@JsonProperty("id")
+	String socialProviderId,
 
 	@JsonProperty("avatar_url")
-	String avatarUrl,
+	String profileImageUrl,
 
 	String email
 ) {

@@ -13,9 +13,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
+
 external:
   github:
     oauth-url: https://github.com/login/oauth/access_token
@@ -23,3 +25,8 @@ external:
     headers:
       client-id: ${GITHUB_API_CLIENT_ID}
       client-secret: ${GITHUB_API_CLIENT_SECRET}
+
+jwt:
+  secret-key: rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345
+  access-token-expiration-ms: 36000
+  refresh-token-expiration-ms: 86400000

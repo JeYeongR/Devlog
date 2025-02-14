@@ -9,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -39,6 +41,10 @@ public class User {
 
 	@Column(nullable = false)
 	private String profileImageUrl;
+
+	@OneToOne
+	@JoinColumn(name = "token_id")
+	private Token token;
 
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;
