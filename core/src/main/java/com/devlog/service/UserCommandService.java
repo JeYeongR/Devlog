@@ -33,6 +33,8 @@ public class UserCommandService {
 
 		Token token = createTokens(user);
 
+		user.updateToken(token);
+
 		return tokenRepository.save(token);
 	}
 

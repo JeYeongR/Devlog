@@ -63,4 +63,8 @@ public class User {
 		user.modifiedAt = user.createdAt;
 		return user;
 	}
+
+	public void updateToken(Token token) {
+		this.token = token;
+	}
 }
