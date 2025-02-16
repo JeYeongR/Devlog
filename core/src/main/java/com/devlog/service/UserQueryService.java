@@ -1,5 +1,7 @@
 package com.devlog.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.devlog.domain.User;
@@ -11,11 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserCommandService {
+public class UserQueryService {
 
 	private final UserRepository userRepository;
 
-	public User save(User user) {
-		return userRepository.save(user);
+	public Optional<User> findUser(String socialProviderId) {
+		return userRepository.findBySocialProviderId(socialProviderId);
 	}
 }
