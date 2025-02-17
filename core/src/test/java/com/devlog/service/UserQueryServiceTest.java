@@ -33,8 +33,7 @@ class UserQueryServiceTest {
 		User mockUser = mock(User.class);
 		when(mockUser.getSocialProviderId()).thenReturn(testProviderId);
 
-		when(userRepository.findBySocialProviderId(testProviderId))
-			.thenReturn(Optional.of(mockUser));
+		when(userRepository.findBySocialProviderId(testProviderId)).thenReturn(Optional.of(mockUser));
 
 		// when
 		Optional<User> result = userQueryService.findUser(testProviderId);
@@ -51,8 +50,7 @@ class UserQueryServiceTest {
 		// given
 		String invalidProviderId = "invalid-123";
 
-		when(userRepository.findBySocialProviderId(invalidProviderId))
-			.thenReturn(Optional.empty());
+		when(userRepository.findBySocialProviderId(invalidProviderId)).thenReturn(Optional.empty());
 
 		// when
 		Optional<User> result = userQueryService.findUser(invalidProviderId);
