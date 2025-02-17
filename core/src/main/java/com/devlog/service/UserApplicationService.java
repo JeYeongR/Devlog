@@ -32,7 +32,7 @@ public class UserApplicationService {
 				response.profileImageUrl()
 			)));
 
-		Token token = tokenIssueService.createTokens(user);
+		Token token = tokenIssueService.createTokens(user.getId());
 
 		user.updateToken(token);
 

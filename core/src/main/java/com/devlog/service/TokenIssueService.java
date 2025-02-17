@@ -18,8 +18,7 @@ public class TokenIssueService {
 	private final TokenRepository tokenRepository;
 	private final JwtProvider jwtProvider;
 
-	public Token createTokens(User user) {
-		Long userId = user.getId();
+	public Token createTokens(Long userId) {
 		String accessToken = jwtProvider.createAccessToken(userId);
 		String refreshToken = jwtProvider.createRefreshToken(userId);
 
