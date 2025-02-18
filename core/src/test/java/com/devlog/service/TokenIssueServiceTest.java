@@ -12,13 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.devlog.domain.Token;
 import com.devlog.external.security.JwtProvider;
-import com.devlog.repository.TokenRepository;
 
 @ExtendWith(MockitoExtension.class)
 class TokenIssueServiceTest {
-
-	@Mock
-	TokenRepository tokenRepository;
 
 	@Mock
 	JwtProvider jwtProvider;
@@ -31,20 +27,18 @@ class TokenIssueServiceTest {
 	void createTokensTest() {
 		// given
 		Long testUserId = 1L;
+		String mockAccessToken = "access";
+		String mockRefreshToken = "refresh";
 
-		Token mockToken = mock(Token.class);
-
-		when(tokenRepository.save(any(Token.class))).thenReturn(mockToken);
-
-		when(jwtProvider.createAccessToken(testUserId)).thenReturn("access");
-		when(jwtProvider.createRefreshToken(testUserId)).thenReturn("refresh");
+		when(jwtProvider.createAccessToken(testUserId)).thenReturn(mockAccessToken);
+		when(jwtProvider.createRefreshToken(testUserId)).thenReturn(mockRefreshToken);
 
 		// when
 		Token result = tokenIssueService.createTokens(testUserId);
 
 		// then
-		assertThat(result).isEqualTo(mockToken);
-		verify(tokenRepository, times(1)).save(any(Token.class));
+		assertThat(result.getAccessToken()).isEqualTo(mockAccessToken);
+		assertThat(result.getRefreshToken()).isEqualTo(mockRefreshToken);
 		verify(jwtProvider, times(1)).createAccessToken(testUserId);
 		verify(jwtProvider, times(1)).createRefreshToken(testUserId);
 	}
