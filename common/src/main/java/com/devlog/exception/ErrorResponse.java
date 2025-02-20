@@ -1,6 +1,4 @@
-package com.devlog.response;
-
-import com.devlog.exception.ErrorType;
+package com.devlog.exception;
 
 public record ErrorResponse(
 

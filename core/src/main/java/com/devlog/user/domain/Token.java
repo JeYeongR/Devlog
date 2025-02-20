@@ -1,8 +1,6 @@
-package com.devlog.domain;
+package com.devlog.user.domain;
 
 import java.time.LocalDateTime;
-
-import com.devlog.external.security.JwtProvider;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

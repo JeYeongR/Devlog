@@ -1,6 +1,6 @@
-package com.devlog.response;
+package com.devlog.user.response;
 
-import com.devlog.domain.Token;
+import com.devlog.user.domain.Token;
 
 public record TokenResponse(
 

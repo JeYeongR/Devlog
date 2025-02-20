@@ -1,5 +1,7 @@
 package com.devlog.domain;
 
+import com.devlog.user.domain.User;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

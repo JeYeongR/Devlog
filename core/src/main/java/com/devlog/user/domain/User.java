@@ -1,7 +1,8 @@
-package com.devlog.domain;
+package com.devlog.user.domain;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,7 +32,7 @@ public class User {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private UserRole role;
+	private Role role;
 
 	@Column(length = 20, nullable = false)
 	private String nickname;
@@ -42,7 +43,7 @@ public class User {
 	@Column(nullable = false)
 	private String profileImageUrl;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "token_id")
 	private Token token;
 
@@ -55,7 +56,7 @@ public class User {
 	public static User create(String email, String nickname, String socialProviderId, String profileImageUrl) {
 		User user = new User();
 		user.email = email;
-		user.role = UserRole.USER;
+		user.role = Role.USER;
 		user.nickname = nickname;
 		user.socialProviderId = socialProviderId;
 		user.profileImageUrl = profileImageUrl;

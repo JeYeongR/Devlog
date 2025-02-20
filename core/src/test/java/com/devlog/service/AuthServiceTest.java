@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.devlog.external.github.GithubClient;
 import com.devlog.external.github.OauthUserResponse;
+import com.devlog.user.service.AuthService;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {

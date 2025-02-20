@@ -2,6 +2,8 @@ package com.devlog.domain;
 
 import java.time.LocalDateTime;
 
+import com.devlog.user.domain.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

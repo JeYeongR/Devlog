@@ -10,8 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.devlog.domain.Token;
-import com.devlog.external.security.JwtProvider;
+import com.devlog.user.domain.Token;
+import com.devlog.user.security.JwtProvider;
+import com.devlog.user.service.TokenIssueService;
 
 @ExtendWith(MockitoExtension.class)
 class TokenIssueServiceTest {

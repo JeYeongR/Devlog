@@ -1,4 +1,4 @@
-package com.devlog.external.security;
+package com.devlog.user.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -46,18 +46,6 @@ public class JwtProvider {
 			.expiration(expiration)
 			.signWith(getSecretKey())
 			.compact();
-	}
-
-	public boolean verify(String token) {
-		try {
-			Jwts.parser()
-				.verifyWith(getSecretKey())
-				.build()
-				.parseSignedClaims(token);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
 	}
 
 	public Long getUserIdFromToken(String token) {

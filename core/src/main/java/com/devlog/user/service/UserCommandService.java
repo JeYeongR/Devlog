@@ -1,9 +1,9 @@
-package com.devlog.service;
+package com.devlog.user.service;
 
 import org.springframework.stereotype.Service;
 
-import com.devlog.domain.User;
-import com.devlog.repository.UserRepository;
+import com.devlog.user.domain.User;
+import com.devlog.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

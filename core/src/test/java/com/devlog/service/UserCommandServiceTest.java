@@ -10,8 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.devlog.domain.User;
-import com.devlog.repository.UserRepository;
+import com.devlog.user.domain.User;
+import com.devlog.user.repository.UserRepository;
+import com.devlog.user.service.UserCommandService;
 
 @ExtendWith(MockitoExtension.class)
 class UserCommandServiceTest {

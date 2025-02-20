@@ -12,9 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.devlog.domain.Token;
-import com.devlog.domain.User;
+import com.devlog.user.domain.Token;
+import com.devlog.user.domain.User;
 import com.devlog.external.github.OauthUserResponse;
+import com.devlog.user.service.AuthService;
+import com.devlog.user.service.TokenIssueService;
+import com.devlog.user.service.UserApplicationService;
+import com.devlog.user.service.UserCommandService;
+import com.devlog.user.service.UserQueryService;
 
 @ExtendWith(MockitoExtension.class)
 class UserApplicationServiceTest {

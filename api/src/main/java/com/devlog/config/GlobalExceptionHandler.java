@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.devlog.exception.ApiException;
+import com.devlog.exception.ErrorResponse;
 import com.devlog.exception.ErrorType;
-import com.devlog.response.ErrorResponse;
 
 import lombok.extern.slf4j.Slf4j;
 

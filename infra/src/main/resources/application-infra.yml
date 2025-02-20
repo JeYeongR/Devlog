@@ -28,5 +28,5 @@ external:
 
 jwt:
   secret-key: rkGU45258GGhiolLO2465TFY5345kGU45258GGhiolLO2465TFY5345
-  access-token-expiration-ms: 36000
+  access-token-expiration-ms: 1800000
   refresh-token-expiration-ms: 86400000

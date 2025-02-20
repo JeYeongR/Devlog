@@ -1,9 +1,9 @@
-package com.devlog.service;
+package com.devlog.user.service;
 
 import org.springframework.stereotype.Service;
 
-import com.devlog.domain.Token;
-import com.devlog.external.security.JwtProvider;
+import com.devlog.user.domain.Token;
+import com.devlog.user.security.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
