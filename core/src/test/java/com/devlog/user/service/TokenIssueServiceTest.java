@@ -1,4 +1,4 @@
-package com.devlog.service;
+package com.devlog.user.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -11,8 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.devlog.user.domain.Token;
-import com.devlog.user.security.JwtProvider;
-import com.devlog.user.service.TokenIssueService;
+import com.devlog.security.JwtProvider;
 
 @ExtendWith(MockitoExtension.class)
 class TokenIssueServiceTest {

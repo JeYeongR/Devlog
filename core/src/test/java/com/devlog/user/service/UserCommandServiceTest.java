@@ -1,4 +1,4 @@
-package com.devlog.service;
+package com.devlog.user.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;

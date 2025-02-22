@@ -1,4 +1,4 @@
-package com.devlog.user.security;
+package com.devlog.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;

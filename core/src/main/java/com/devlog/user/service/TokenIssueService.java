@@ -3,7 +3,7 @@ package com.devlog.user.service;
 import org.springframework.stereotype.Service;
 
 import com.devlog.user.domain.Token;
-import com.devlog.user.security.JwtProvider;
+import com.devlog.security.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

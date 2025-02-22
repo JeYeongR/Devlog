@@ -1,4 +1,4 @@
-package com.devlog.service;
+package com.devlog.user.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.devlog.exception.ApiException;
 import com.devlog.user.domain.User;
 import com.devlog.user.repository.UserRepository;
 import com.devlog.user.service.UserQueryService;
@@ -26,12 +27,12 @@ class UserQueryServiceTest {
 	UserQueryService userQueryService;
 
 	@Test
-	@DisplayName("사용자 정상 조회")
+	@DisplayName("소설 제공 아이디로 사용자 정상 조회")
 	void findUserTest() {
 		// given
 		String testProviderId = "test-12345";
-
 		User mockUser = mock(User.class);
+
 		when(mockUser.getSocialProviderId()).thenReturn(testProviderId);
 
 		when(userRepository.findBySocialProviderId(testProviderId)).thenReturn(Optional.of(mockUser));
@@ -46,7 +47,7 @@ class UserQueryServiceTest {
 	}
 
 	@Test
-	@DisplayName("존재하지 않는 사용자 조회")
+	@DisplayName("소설 제공 아이디로 존재하지 않는 사용자 조회")
 	void findUserTestNotFound() {
 		// given
 		String invalidProviderId = "invalid-123";
@@ -59,5 +60,37 @@ class UserQueryServiceTest {
 		// then
 		assertThat(result).isEmpty();
 		verify(userRepository, times(1)).findBySocialProviderId(invalidProviderId);
+	}
+
+	@Test
+	@DisplayName("유저 아이디로 사용자 정상 조회")
+	void findUserByIdTest() {
+		// given
+		Long userId = 0L;
+		User user = mock(User.class);
+
+		when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+		// when
+		User result = userQueryService.findUserById(userId);
+
+		// then
+		assertThat(result).isEqualTo(user);
+		verify(userRepository, times(1)).findById(userId);
+	}
+
+	@Test
+	@DisplayName("유저 아이디로 존재하지 않는 사용자 조회")
+	void findUserByIdTestNotFound() {
+		// given
+		Long userId = 0L;
+
+		when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+		// when | then
+		assertThatThrownBy(() -> userQueryService.findUserById(userId))
+			.isInstanceOf(ApiException.class);
+
+		verify(userRepository, times(1)).findById(userId);
 	}
 }

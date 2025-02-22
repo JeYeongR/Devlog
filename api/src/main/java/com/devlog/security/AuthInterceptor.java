@@ -6,7 +6,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorType;
-import com.devlog.user.security.JwtProvider;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

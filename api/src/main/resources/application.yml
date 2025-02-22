@@ -2,4 +2,6 @@ spring:
   profiles:
     active: local
   config:
-    import: application-infra.yml
+    import:
+     - application-infra.yml
+     - application-core.yml

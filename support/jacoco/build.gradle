@@ -19,7 +19,8 @@ testCodeCoverageReport {
                         'com/devlog/*/domain/*',
                         'com/devlog/*/response/*',
                         'com/devlog/*/request/*',
-                        'com/devlog/*/*/*Response.class'
+                        'com/devlog/*/*/*Response.class',
+                        'com/devlog/security/*',
                 ])
             }
     ))

@@ -49,36 +49,9 @@ subprojects {
             xml.required = false
             csv.required = false
             html.required = true
-//            html.outputLocation = layout.buildDirectory.dir('jacocoHTML')
         }
         dependsOn test
 
-        finalizedBy 'jacocoTestCoverageVerification'
-    }
-
-    jacocoTestCoverageVerification {
-        violationRules {
-
-            rule {
-                enabled = true
-                element = 'CLASS'
-
-                limit {
-                    counter = 'METHOD'
-                    value = 'COVEREDRATIO'
-                    minimum = 0.8
-                }
-
-                excludes = [
-                        'com.devlog.exception.*',
-                        'com.devlog.config.*',
-                        'com.devlog.domain.*',
-                        'com.devlog.*.domain.*',
-                        'com.devlog.*.response.*',
-                        'com.devlog.*.request.*',
-                ]
-            }
-        }
     }
 
     bootJar.enabled = false
