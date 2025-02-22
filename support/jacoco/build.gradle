@@ -1,0 +1,26 @@
+dependencies {
+    jacocoAggregation project(':api')
+    jacocoAggregation project(':core')
+    jacocoAggregation project(':infra')
+}
+
+testCodeCoverageReport {
+    getClassDirectories().setFrom(files(
+            [project(':api'),
+             project(':core'),
+             project(':common'),
+             project(':infra'),
+            ].collect {
+                it.fileTree(dir: "${it.buildDir}/classes/java/main", exclude: [
+                        'com/devlog/exception/*',
+                        'com/devlog/config/*',
+                        'com/devlog/*Application.class',
+                        'com/devlog/domain/*',
+                        'com/devlog/*/domain/*',
+                        'com/devlog/*/response/*',
+                        'com/devlog/*/request/*',
+                        'com/devlog/*/*/*Response.class'
+                ])
+            }
+    ))
+}

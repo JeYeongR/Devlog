@@ -7,6 +7,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'groovy'
     apply plugin: 'java-library'
+    apply plugin: 'jacoco'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
@@ -19,6 +20,10 @@ subprojects {
         }
     }
 
+    jacoco {
+        toolVersion = "0.8.12"
+        reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+    }
 
     repositories {
         mavenCentral()
@@ -36,8 +41,50 @@ subprojects {
 
     tasks.named('test') {
         useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.required = false
+            csv.required = false
+            html.required = true
+//            html.outputLocation = layout.buildDirectory.dir('jacocoHTML')
+        }
+        dependsOn test
+
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+
+            rule {
+                enabled = true
+                element = 'CLASS'
+
+                limit {
+                    counter = 'METHOD'
+                    value = 'COVEREDRATIO'
+//                    minimum = 0.5
+                }
+
+                excludes = [
+                        'com.devlog.exception.*',
+                        'com.devlog.config.*',
+                        'com.devlog.domain.*',
+                        'com.devlog.*.domain.*',
+                        'com.devlog.*.response.*',
+                        'com.devlog.*.request.*',
+                ]
+            }
+        }
     }
 
     bootJar.enabled = false
     jar.enabled = false
+}
+
+project(':support:jacoco') {
+    apply plugin: 'jacoco-report-aggregation'
 }

@@ -4,4 +4,7 @@ include 'api'
 include 'common'
 include 'core'
 include 'infra'
+include 'support'
+include 'support:jacoco'
+findProject(':support:jacoco')?.name = 'jacoco'
 
