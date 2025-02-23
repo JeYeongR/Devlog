@@ -2,6 +2,7 @@ package com.devlog.domain;
 
 import java.time.LocalDateTime;
 
+import com.devlog.post.domain.Post;
 import com.devlog.user.domain.User;
 
 import jakarta.persistence.Column;

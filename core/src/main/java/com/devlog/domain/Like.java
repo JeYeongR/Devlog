@@ -1,5 +1,6 @@
 package com.devlog.domain;
 
+import com.devlog.post.domain.Post;
 import com.devlog.user.domain.User;
 
 import jakarta.persistence.Entity;

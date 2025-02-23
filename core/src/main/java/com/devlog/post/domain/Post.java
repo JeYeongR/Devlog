@@ -1,4 +1,4 @@
-package com.devlog.domain;
+package com.devlog.post.domain;
 
 import java.time.LocalDateTime;
 
@@ -37,7 +37,7 @@ public class Post {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private PostVisibilityStatus visibilityStatus;
+	private VisibilityStatus visibilityStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id")
@@ -48,4 +48,15 @@ public class Post {
 
 	@Column(nullable = false)
 	private LocalDateTime modifiedAt;
+
+	public static Post create(String title, String content, VisibilityStatus visibilityStatus, User user) {
+		Post post = new Post();
+		post.title = title;
+		post.content = content;
+		post.visibilityStatus = visibilityStatus;
+		post.user = user;
+		post.createdAt = LocalDateTime.now();
+		post.modifiedAt = post.createdAt;
+		return post;
+	}
 }

@@ -12,14 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.devlog.external.github.OauthUserResponse;
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;
-import com.devlog.external.github.OauthUserResponse;
-import com.devlog.user.service.AuthService;
-import com.devlog.user.service.TokenIssueService;
-import com.devlog.user.service.UserApplicationService;
-import com.devlog.user.service.UserCommandService;
-import com.devlog.user.service.UserQueryService;
 
 @ExtendWith(MockitoExtension.class)
 class UserApplicationServiceTest {
@@ -28,16 +23,16 @@ class UserApplicationServiceTest {
 	private UserCommandService userCommandService;
 
 	@Mock
-	private UserQueryService userQueryService;
+	UserQueryService userQueryService;
 
 	@Mock
-	private AuthService authService;
+	AuthService authService;
 
 	@Mock
-	private TokenIssueService tokenIssueService;
+	TokenIssueService tokenIssueService;
 
 	@InjectMocks
-	private UserApplicationService userApplicationService;
+	UserApplicationService userApplicationService;
 
 	@Test
 	@DisplayName("신규 사용자 로그인")

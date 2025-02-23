@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.devlog.exception.ApiException;
 import com.devlog.user.domain.User;
 import com.devlog.user.repository.UserRepository;
-import com.devlog.user.service.UserQueryService;
 
 @ExtendWith(MockitoExtension.class)
 class UserQueryServiceTest {
