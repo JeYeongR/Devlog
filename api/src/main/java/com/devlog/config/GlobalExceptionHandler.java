@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorResponse;
@@ -27,5 +28,16 @@ public class GlobalExceptionHandler {
 		log.error("Exception occurred. message={}, className={}", e.getMessage(), e.getClass().getName());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 			.body(new ErrorResponse(ErrorType.UNKNOWN.getDescription(), ErrorType.UNKNOWN));
+	}
+
+	@ExceptionHandler(NoResourceFoundException.class)
+	public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException e) {
+		log.error(
+			"NoResourceFound Exception occurred. message={}, className={}",
+			e.getMessage(),
+			e.getClass().getName()
+		);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			.body(new ErrorResponse(ErrorType.NO_RESOURCE.getDescription(), ErrorType.NO_RESOURCE));
 	}
 }
