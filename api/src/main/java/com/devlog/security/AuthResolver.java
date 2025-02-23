@@ -1,12 +1,15 @@
 package com.devlog.security;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import com.devlog.exception.ApiException;
+import com.devlog.exception.ErrorType;
 import com.devlog.user.service.UserQueryService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,9 +33,15 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
 		NativeWebRequest webRequest,
 		WebDataBinderFactory binderFactory
 	) {
+
 		HttpServletRequest request = (HttpServletRequest)webRequest.getNativeRequest();
 		Long userId = (Long)request.getAttribute("userId");
 
-		return userQueryService.findUserById(userId);
+		LoginUser annotation = parameter.getParameterAnnotation(LoginUser.class);
+		if (userId == null && annotation.required()) {
+			throw new ApiException("인증이 필요합니다.", ErrorType.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+		}
+
+		return userId != null ? userQueryService.findUserById(userId) : null;
 	}
 }
