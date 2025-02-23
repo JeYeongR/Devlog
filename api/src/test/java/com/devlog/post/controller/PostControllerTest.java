@@ -60,4 +60,21 @@ class PostControllerTest {
 				.content(requestJson))
 			.andExpect(status().isOk());
 	}
+
+	@Test
+	@DisplayName("GET /v1/posts/{postId} 포스트 단건 조회")
+	void findPostTest() throws Exception {
+		// given
+		Long postId = 1L;
+		Post mockPost = mock(Post.class);
+		when(mockPost.getUser()).thenReturn(mock(User.class));
+
+		// when
+		given(postApplicationService.findPost(postId))
+			.willReturn(mockPost);
+
+		// then
+		mockMvc.perform(get("/v1/posts/{postId}", postId.toString()))
+			.andExpect(status().isOk());
+	}
 }

@@ -39,7 +39,7 @@ public class Post {
 	@Enumerated(EnumType.STRING)
 	private VisibilityStatus visibilityStatus;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "users_id")
 	private User user;
 

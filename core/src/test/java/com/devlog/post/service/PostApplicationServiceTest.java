@@ -41,4 +41,21 @@ class PostApplicationServiceTest {
 		assertThat(result).isEqualTo(mockPost);
 		verify(postCommandService, times(1)).save(any(Post.class));
 	}
+
+	@Test
+	@DisplayName("포스트 단건 조회")
+	void findPostTest() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+
+		// when
+		Post result = postApplicationService.findPost(mockPostId);
+
+		// then
+		assertThat(result).isEqualTo(mockPost);
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+	}
 }

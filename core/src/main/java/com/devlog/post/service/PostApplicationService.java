@@ -30,4 +30,8 @@ public class PostApplicationService {
 			user
 		));
 	}
+
+	public Post findPost(Long postId) {
+		return postQueryService.findPostById(postId);
+	}
 }
