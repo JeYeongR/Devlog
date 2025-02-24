@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.devlog.external.github.OauthUserResponse;
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;
+import com.devlog.user.response.TokenResponse;
 
 @ExtendWith(MockitoExtension.class)
 class UserApplicationServiceTest {
@@ -47,6 +48,7 @@ class UserApplicationServiceTest {
 		when(mockUser.getId()).thenReturn(1L);
 
 		Token mockToken = mock(Token.class);
+		TokenResponse mockTokenResponse = TokenResponse.from(mockToken);
 
 		when(authService.getUserInfo(code)).thenReturn(response);
 		when(userQueryService.findUser(response.socialProviderId())).thenReturn(Optional.empty());
@@ -54,10 +56,10 @@ class UserApplicationServiceTest {
 		when(tokenIssueService.createTokens(mockUser.getId())).thenReturn(mockToken);
 
 		// when
-		Token result = userApplicationService.login(code);
+		TokenResponse result = userApplicationService.login(code);
 
 		// then
-		assertThat(result).isEqualTo(mockToken);
+		assertThat(result).isEqualTo(mockTokenResponse);
 		verify(authService, times(1)).getUserInfo(code);
 		verify(userQueryService, times(1)).findUser(response.socialProviderId());
 		verify(userCommandService, times(1)).save(any(User.class));
@@ -77,16 +79,17 @@ class UserApplicationServiceTest {
 		when(mockUser.getId()).thenReturn(1L);
 
 		Token mockToken = mock(Token.class);
+		TokenResponse mockTokenResponse = TokenResponse.from(mockToken);
 
 		when(authService.getUserInfo(code)).thenReturn(response);
 		when(userQueryService.findUser(response.socialProviderId())).thenReturn(Optional.of(mockUser));
 		when(tokenIssueService.createTokens(mockUser.getId())).thenReturn(mockToken);
 
 		// when
-		Token result = userApplicationService.login(code);
+		TokenResponse result = userApplicationService.login(code);
 
 		// then
-		assertThat(result).isEqualTo(mockToken);
+		assertThat(result).isEqualTo(mockTokenResponse);
 		verify(authService, times(1)).getUserInfo(code);
 		verify(userQueryService, times(1)).findUser(response.socialProviderId());
 		verify(userCommandService, never()).save(any());

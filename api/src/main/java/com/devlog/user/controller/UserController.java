@@ -22,7 +22,7 @@ public class UserController {
 
 	@GetMapping("/auth/callback")
 	public ResponseEntity<TokenResponse> callback(@RequestParam String code) {
-		TokenResponse response = TokenResponse.from(userApplicationService.login(code));
+		TokenResponse response = userApplicationService.login(code);
 
 		return ResponseEntity.ok(response);
 	}

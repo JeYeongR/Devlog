@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.response.PagePostResult;
+import com.devlog.post.response.PostCreateResponse;
+import com.devlog.post.response.PostDetailResponse;
 import com.devlog.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,10 +39,10 @@ class PostApplicationServiceTest {
 		when(postCommandService.save(any(Post.class))).thenReturn(mockPost);
 
 		// when
-		Post result = postApplicationService.save("title", "content", VisibilityStatus.PUBLIC, mock(User.class));
+		PostCreateResponse result = postApplicationService.save("title", "content", VisibilityStatus.PUBLIC, mock(User.class));
 
 		// then
-		assertThat(result).isEqualTo(mockPost);
+		assertThat(result).isEqualTo(PostCreateResponse.from(mockPost));
 		verify(postCommandService, times(1)).save(any(Post.class));
 	}
 
@@ -69,14 +71,16 @@ class PostApplicationServiceTest {
 		// given
 		Long mockPostId = 1L;
 		Post mockPost = mock(Post.class);
+		User mockUser = mock(User.class);
+		when(mockPost.getUser()).thenReturn(mockUser);
 
 		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
 
 		// when
-		Post result = postApplicationService.findPost(mockPostId);
+		PostDetailResponse result = postApplicationService.findPost(mockPostId, mockUser);
 
 		// then
-		assertThat(result).isEqualTo(mockPost);
+		assertThat(result).isEqualTo(PostDetailResponse.from(mockPost, mockUser));
 		verify(postQueryService, times(1)).findPostById(mockPostId);
 	}
 }

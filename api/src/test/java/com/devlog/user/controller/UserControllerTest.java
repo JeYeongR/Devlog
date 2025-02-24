@@ -14,6 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.devlog.user.domain.Token;
+import com.devlog.user.response.TokenResponse;
 import com.devlog.user.service.UserApplicationService;
 
 @WebMvcTest(
@@ -37,9 +38,10 @@ class UserControllerTest {
 		// given
 		String code = "test-code";
 		Token token = Token.create("test-access-token", "test-refresh-token");
+		TokenResponse mockTokenResponse = TokenResponse.from(token);
 
 		// when
-		given(userApplicationService.login(code)).willReturn(token);
+		given(userApplicationService.login(code)).willReturn(mockTokenResponse);
 
 		// then
 		mockMvc.perform(get("/v1/users/auth/callback").param("code", code))

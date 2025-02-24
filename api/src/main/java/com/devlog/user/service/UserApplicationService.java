@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devlog.external.github.OauthUserResponse;
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;
+import com.devlog.user.response.TokenResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class UserApplicationService {
 	private final TokenIssueService tokenIssueService;
 
 	@Transactional
-	public Token login(String code) {
+	public TokenResponse login(String code) {
 		OauthUserResponse response = authService.getUserInfo(code);
 
 		User user = userQueryService.findUser(response.socialProviderId())
@@ -36,6 +37,6 @@ public class UserApplicationService {
 
 		user.updateToken(token);
 
-		return token;
+		return TokenResponse.from(token);
 	}
 }

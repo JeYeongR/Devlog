@@ -19,6 +19,8 @@ import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.request.PostCreateRequest;
 import com.devlog.post.request.PostSearchRequest;
 import com.devlog.post.response.PagePostResult;
+import com.devlog.post.response.PostCreateResponse;
+import com.devlog.post.response.PostDetailResponse;
 import com.devlog.post.service.PostApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,7 +56,7 @@ class PostControllerTest {
 			any(String.class),
 			any(VisibilityStatus.class),
 			any(User.class)))
-			.willReturn(mock(Post.class));
+			.willReturn(mock(PostCreateResponse.class));
 
 		// then
 		mockMvc.perform(post("/v1/posts")
@@ -85,16 +87,18 @@ class PostControllerTest {
 	@DisplayName("GET /v1/posts/{postId} 포스트 단건 조회")
 	void findPostTest() throws Exception {
 		// given
-		Long postId = 1L;
+		Long mockPostId = 1L;
 		Post mockPost = mock(Post.class);
-		when(mockPost.getUser()).thenReturn(mock(User.class));
+		User mockUser = mock(User.class);
+
+		when(mockPost.getUser()).thenReturn(mockUser);
 
 		// when
-		given(postApplicationService.findPost(postId))
-			.willReturn(mockPost);
+		given(postApplicationService.findPost(mockPostId, mockUser))
+			.willReturn(mock(PostDetailResponse.class));
 
 		// then
-		mockMvc.perform(get("/v1/posts/{postId}", postId.toString()))
+		mockMvc.perform(get("/v1/posts/{postId}", mockPostId.toString()))
 			.andExpect(status().isOk());
 	}
 }

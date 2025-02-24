@@ -32,12 +32,12 @@ public class PostController {
 	@AuthRequired
 	@PostMapping
 	public ResponseEntity<PostCreateResponse> save(@LoginUser User user, @RequestBody PostCreateRequest request) {
-		PostCreateResponse response = PostCreateResponse.from(postApplicationService.save(
+		PostCreateResponse response = postApplicationService.save(
 			request.title(),
 			request.content(),
 			request.visibilityStatus(),
 			user
-		));
+		);
 
 		return ResponseEntity.ok(response);
 	}
@@ -54,7 +54,7 @@ public class PostController {
 		@LoginUser(required = false) User user,
 		@PathVariable Long postId
 	) {
-		PostDetailResponse response = PostDetailResponse.from(postApplicationService.findPost(postId), user);
+		PostDetailResponse response = postApplicationService.findPost(postId, user);
 
 		return ResponseEntity.ok(response);
 	}

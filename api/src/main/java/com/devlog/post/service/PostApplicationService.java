@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.response.PagePostResult;
+import com.devlog.post.response.PostCreateResponse;
+import com.devlog.post.response.PostDetailResponse;
 import com.devlog.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -19,18 +21,20 @@ public class PostApplicationService {
 	private final PostCommandService postCommandService;
 	private final PostQueryService postQueryService;
 
-	public Post save(
+	public PostCreateResponse save(
 		String title,
 		String content,
 		VisibilityStatus visibilityStatus,
 		User user
 	) {
-		return postCommandService.save(Post.create(
+		Post post = postCommandService.save(Post.create(
 			title,
 			content,
 			visibilityStatus,
 			user
 		));
+
+		return PostCreateResponse.from(post);
 	}
 
 	public PagePostResult search(String query, int page, int size) {
@@ -39,7 +43,9 @@ public class PostApplicationService {
 		return PagePostResult.from(pagePost);
 	}
 
-	public Post findPost(Long postId) {
-		return postQueryService.findPostById(postId);
+	public PostDetailResponse findPost(Long postId, User user) {
+		Post post = postQueryService.findPostById(postId);
+
+		return PostDetailResponse.from(post, user);
 	}
 }
