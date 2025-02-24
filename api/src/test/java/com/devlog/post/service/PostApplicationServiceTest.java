@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 
+import com.devlog.exception.ApiException;
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.response.PagePostResult;
@@ -39,7 +40,8 @@ class PostApplicationServiceTest {
 		when(postCommandService.save(any(Post.class))).thenReturn(mockPost);
 
 		// when
-		PostCreateResponse result = postApplicationService.save("title", "content", VisibilityStatus.PUBLIC, mock(User.class));
+		PostCreateResponse result = postApplicationService.save("title", "content", VisibilityStatus.PUBLIC,
+			mock(User.class));
 
 		// then
 		assertThat(result).isEqualTo(PostCreateResponse.from(mockPost));
@@ -66,7 +68,7 @@ class PostApplicationServiceTest {
 	}
 
 	@Test
-	@DisplayName("포스트 단건 조회")
+	@DisplayName("포스트 단건 정상 조회")
 	void findPostTest() {
 		// given
 		Long mockPostId = 1L;
@@ -81,6 +83,44 @@ class PostApplicationServiceTest {
 
 		// then
 		assertThat(result).isEqualTo(PostDetailResponse.from(mockPost, mockUser));
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+	}
+
+	@Test
+	@DisplayName("작성자가 아닌 비공개 포스트 단건 조회")
+	void findPostTestPrivateForbidden() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+		User mockUser = mock(User.class);
+		when(mockPost.getUser()).thenReturn(mock(User.class));
+		when(mockPost.getVisibilityStatus()).thenReturn(VisibilityStatus.PRIVATE);
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+
+		// when | then
+		assertThatThrownBy(() -> postApplicationService.findPost(mockPostId, mockUser))
+			.isInstanceOf(ApiException.class);
+
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+	}
+
+	@Test
+	@DisplayName("작성자가 아닌 작성중인 포스트 단건 조회")
+	void findPostTestDraftForbidden() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+		User mockUser = mock(User.class);
+		when(mockPost.getUser()).thenReturn(mock(User.class));
+		when(mockPost.getVisibilityStatus()).thenReturn(VisibilityStatus.DRAFT);
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+
+		// when | then
+		assertThatThrownBy(() -> postApplicationService.findPost(mockPostId, mockUser))
+			.isInstanceOf(ApiException.class);
+
 		verify(postQueryService, times(1)).findPostById(mockPostId);
 	}
 }

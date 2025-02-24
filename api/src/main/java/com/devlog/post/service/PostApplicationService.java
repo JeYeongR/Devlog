@@ -1,8 +1,11 @@
 package com.devlog.post.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.devlog.exception.ApiException;
+import com.devlog.exception.ErrorType;
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.response.PagePostResult;
@@ -45,6 +48,14 @@ public class PostApplicationService {
 
 	public PostDetailResponse findPost(Long postId, User user) {
 		Post post = postQueryService.findPostById(postId);
+
+		if (post.getVisibilityStatus() == VisibilityStatus.PRIVATE && !post.getUser().equals(user)) {
+			throw new ApiException("비공개 포스트는 작성자만 조회할 수 있습니다.", ErrorType.FORBIDDEN, HttpStatus.FORBIDDEN);
+		}
+
+		if (post.getVisibilityStatus() == VisibilityStatus.DRAFT && !post.getUser().equals(user)) {
+			throw new ApiException("작성중인 포스트는 작성자만 조회할 수 있습니다.", ErrorType.FORBIDDEN, HttpStatus.FORBIDDEN);
+		}
 
 		return PostDetailResponse.from(post, user);
 	}
