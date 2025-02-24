@@ -18,9 +18,11 @@ import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.request.PostCreateRequest;
 import com.devlog.post.request.PostSearchRequest;
+import com.devlog.post.request.PostUpdateRequest;
 import com.devlog.post.response.PagePostResult;
 import com.devlog.post.response.PostCreateResponse;
 import com.devlog.post.response.PostDetailResponse;
+import com.devlog.post.response.PostUpdateResponse;
 import com.devlog.post.service.PostApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -99,6 +101,29 @@ class PostControllerTest {
 
 		// then
 		mockMvc.perform(get("/v1/posts/{postId}", mockPostId.toString()))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("GET /v1/posts 포스트 수정")
+	void updateTest() throws Exception {
+		// given
+		PostUpdateRequest request = new PostUpdateRequest("Test Title", "Test Content", VisibilityStatus.PUBLIC);
+		String requestJson = objectMapper.writeValueAsString(request);
+
+		// when
+		given(postApplicationService.update(
+			any(Long.class),
+			any(String.class),
+			any(String.class),
+			any(VisibilityStatus.class),
+			any(User.class)))
+			.willReturn(mock(PostUpdateResponse.class));
+
+		// then
+		mockMvc.perform(patch("/v1/posts/{postId}", 1L)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(requestJson))
 			.andExpect(status().isOk());
 	}
 }

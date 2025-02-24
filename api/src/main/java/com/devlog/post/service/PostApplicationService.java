@@ -3,6 +3,7 @@ package com.devlog.post.service;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorType;
@@ -11,6 +12,7 @@ import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.response.PagePostResult;
 import com.devlog.post.response.PostCreateResponse;
 import com.devlog.post.response.PostDetailResponse;
+import com.devlog.post.response.PostUpdateResponse;
 import com.devlog.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class PostApplicationService {
 	private final PostCommandService postCommandService;
 	private final PostQueryService postQueryService;
 
+	@Transactional
 	public PostCreateResponse save(
 		String title,
 		String content,
@@ -40,12 +43,14 @@ public class PostApplicationService {
 		return PostCreateResponse.from(post);
 	}
 
+	@Transactional(readOnly = true)
 	public PagePostResult search(String query, int page, int size) {
 		Page<Post> pagePost = postQueryService.findPosts(query, page, size);
 
 		return PagePostResult.from(pagePost);
 	}
 
+	@Transactional(readOnly = true)
 	public PostDetailResponse findPost(Long postId, User user) {
 		Post post = postQueryService.findPostById(postId);
 
@@ -58,5 +63,24 @@ public class PostApplicationService {
 		}
 
 		return PostDetailResponse.from(post, user);
+	}
+
+	@Transactional
+	public PostUpdateResponse update(
+		Long postId,
+		String title,
+		String content,
+		VisibilityStatus visibilityStatus,
+		User user
+	) {
+		Post post = postQueryService.findPostById(postId);
+
+		if (!post.getUser().equals(user)) {
+			throw new ApiException("작성자만 수정할 수 있습니다.", ErrorType.FORBIDDEN, HttpStatus.FORBIDDEN);
+		}
+
+		post.update(title, content, visibilityStatus);
+
+		return PostUpdateResponse.from(post);
 	}
 }

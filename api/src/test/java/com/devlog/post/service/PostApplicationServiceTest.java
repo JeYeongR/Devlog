@@ -17,6 +17,7 @@ import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.response.PagePostResult;
 import com.devlog.post.response.PostCreateResponse;
 import com.devlog.post.response.PostDetailResponse;
+import com.devlog.post.response.PostUpdateResponse;
 import com.devlog.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -119,6 +120,53 @@ class PostApplicationServiceTest {
 
 		// when | then
 		assertThatThrownBy(() -> postApplicationService.findPost(mockPostId, mockUser))
+			.isInstanceOf(ApiException.class);
+
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+	}
+
+	@Test
+	@DisplayName("포스트 정상 수정")
+	void updateTest() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+		User mockUser = mock(User.class);
+		when(mockPost.getUser()).thenReturn(mockUser);
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+
+		// when
+		PostUpdateResponse result = postApplicationService.update(
+			mockPostId,
+			"title",
+			"content",
+			VisibilityStatus.PUBLIC,
+			mockUser
+		);
+
+		// then
+		assertThat(result).isEqualTo(PostUpdateResponse.from(mockPost));
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+	}
+
+	@Test
+	@DisplayName("포스트 정상 수정")
+	void updateTestForbidden() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+		User mockUser = mock(User.class);
+		when(mockPost.getUser()).thenReturn(mock(User.class));
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+
+		// when | then
+		assertThatThrownBy(() -> postApplicationService.update(mockPostId,
+			"title",
+			"content",
+			VisibilityStatus.PUBLIC,
+			mockUser))
 			.isInstanceOf(ApiException.class);
 
 		verify(postQueryService, times(1)).findPostById(mockPostId);

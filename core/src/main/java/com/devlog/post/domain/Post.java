@@ -59,4 +59,11 @@ public class Post {
 		post.modifiedAt = post.createdAt;
 		return post;
 	}
+
+	public void update(String title, String content, VisibilityStatus visibilityStatus) {
+		this.title = title != null ? title : this.title;
+		this.content = content != null ? content : this.content;
+		this.visibilityStatus = visibilityStatus != null ? visibilityStatus : this.visibilityStatus;
+		this.modifiedAt = LocalDateTime.now();
+	}
 }

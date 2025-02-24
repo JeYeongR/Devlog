@@ -2,6 +2,7 @@ package com.devlog.post.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devlog.post.request.PostCreateRequest;
 import com.devlog.post.request.PostSearchRequest;
+import com.devlog.post.request.PostUpdateRequest;
 import com.devlog.post.response.PagePostResult;
 import com.devlog.post.response.PostCreateResponse;
 import com.devlog.post.response.PostDetailResponse;
+import com.devlog.post.response.PostUpdateResponse;
 import com.devlog.post.service.PostApplicationService;
 import com.devlog.security.AuthRequired;
 import com.devlog.security.LoginUser;
@@ -55,6 +58,24 @@ public class PostController {
 		@PathVariable Long postId
 	) {
 		PostDetailResponse response = postApplicationService.findPost(postId, user);
+
+		return ResponseEntity.ok(response);
+	}
+
+	@AuthRequired
+	@PatchMapping("/{postId}")
+	public ResponseEntity<PostUpdateResponse> update(
+		@LoginUser User user,
+		@PathVariable Long postId,
+		@RequestBody PostUpdateRequest request
+	) {
+		PostUpdateResponse response = postApplicationService.update(
+			postId,
+			request.title(),
+			request.content(),
+			request.visibilityStatus(),
+			user
+		);
 
 		return ResponseEntity.ok(response);
 	}
