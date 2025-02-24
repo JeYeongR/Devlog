@@ -151,7 +151,7 @@ class PostApplicationServiceTest {
 	}
 
 	@Test
-	@DisplayName("포스트 정상 수정")
+	@DisplayName("작성자가 아닌 포스트 수정")
 	void updateTestForbidden() {
 		// given
 		Long mockPostId = 1L;
@@ -167,6 +167,42 @@ class PostApplicationServiceTest {
 			"content",
 			VisibilityStatus.PUBLIC,
 			mockUser))
+			.isInstanceOf(ApiException.class);
+
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+	}
+
+	@Test
+	@DisplayName("포스트 정상 삭제")
+	void deleteTest() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+		User mockUser = mock(User.class);
+		when(mockPost.getUser()).thenReturn(mockUser);
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+
+		// when
+		postApplicationService.delete(mockPostId, mockUser);
+
+		// then
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+	}
+
+	@Test
+	@DisplayName("작성자가 아닌 포스트 삭제")
+	void deleteTestForbidden() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+		User mockUser = mock(User.class);
+		when(mockPost.getUser()).thenReturn(mock(User.class));
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+
+		// when | then
+		assertThatThrownBy(() -> postApplicationService.delete(mockPostId, mockUser))
 			.isInstanceOf(ApiException.class);
 
 		verify(postQueryService, times(1)).findPostById(mockPostId);

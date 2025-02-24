@@ -83,4 +83,15 @@ public class PostApplicationService {
 
 		return PostUpdateResponse.from(post);
 	}
+
+	@Transactional
+	public void delete(Long postId, User user) {
+		Post post = postQueryService.findPostById(postId);
+
+		if (!post.getUser().equals(user)) {
+			throw new ApiException("작성자만 삭제할 수 있습니다.", ErrorType.FORBIDDEN, HttpStatus.FORBIDDEN);
+		}
+
+		post.delete(user);
+	}
 }

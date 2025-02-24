@@ -49,6 +49,9 @@ public class Post {
 	@Column(nullable = false)
 	private LocalDateTime modifiedAt;
 
+	@Column
+	private LocalDateTime deletedAt;
+
 	public static Post create(String title, String content, VisibilityStatus visibilityStatus, User user) {
 		Post post = new Post();
 		post.title = title;
@@ -65,5 +68,9 @@ public class Post {
 		this.content = content != null ? content : this.content;
 		this.visibilityStatus = visibilityStatus != null ? visibilityStatus : this.visibilityStatus;
 		this.modifiedAt = LocalDateTime.now();
+	}
+
+	public void delete(User user) {
+		this.deletedAt = LocalDateTime.now();
 	}
 }

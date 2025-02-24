@@ -105,9 +105,10 @@ class PostControllerTest {
 	}
 
 	@Test
-	@DisplayName("GET /v1/posts 포스트 수정")
+	@DisplayName("PATCH /v1/posts/{postId} 포스트 수정")
 	void updateTest() throws Exception {
 		// given
+		Long mockPostId = 1L;
 		PostUpdateRequest request = new PostUpdateRequest("Test Title", "Test Content", VisibilityStatus.PUBLIC);
 		String requestJson = objectMapper.writeValueAsString(request);
 
@@ -121,9 +122,23 @@ class PostControllerTest {
 			.willReturn(mock(PostUpdateResponse.class));
 
 		// then
-		mockMvc.perform(patch("/v1/posts/{postId}", 1L)
+		mockMvc.perform(patch("/v1/posts/{postId}", mockPostId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestJson))
 			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("DELETE /v1/posts/{postId} 포스트 삭제")
+	void deleteTest() throws Exception {
+		// given
+		Long mockPostId = 1L;
+
+		// when
+
+		// then
+		mockMvc.perform(delete("/v1/posts/{postId}", mockPostId)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNoContent());
 	}
 }

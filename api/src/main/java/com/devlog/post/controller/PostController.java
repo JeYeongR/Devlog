@@ -1,6 +1,7 @@
 package com.devlog.post.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,5 +79,13 @@ public class PostController {
 		);
 
 		return ResponseEntity.ok(response);
+	}
+
+	@AuthRequired
+	@DeleteMapping("/{postId}")
+	public ResponseEntity<Void> delete(@LoginUser User user, @PathVariable Long postId) {
+		postApplicationService.delete(postId, user);
+
+		return ResponseEntity.noContent().build();
 	}
 }
