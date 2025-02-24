@@ -25,13 +25,13 @@ public class PostQueryService {
 	public Page<Post> findPosts(String query, int page, int size) {
 		Pageable pageable = PageRequest.of(page - 1, size);
 
-		return postRepository.findAllByVisibilityStatusEqualsAndTitleContainingOrContentContainingOrderByCreatedAtDesc(
+		return postRepository.findAllByVisibilityStatusEqualsAndTitleContainingOrContentContainingAndDeletedAtIsNullOrderByCreatedAtDesc(
 			VisibilityStatus.PUBLIC, query, query, pageable
 		);
 	}
 
 	public Post findPostById(Long postId) {
-		return postRepository.findById(postId)
+		return postRepository.findByIdAndDeletedAtIsNull(postId)
 			.orElseThrow(() -> new ApiException("포스트를 찾을 수 없습니다.", ErrorType.NOT_FOUND, HttpStatus.NOT_FOUND));
 	}
 }

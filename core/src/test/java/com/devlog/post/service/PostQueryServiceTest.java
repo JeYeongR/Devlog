@@ -39,7 +39,7 @@ class PostQueryServiceTest {
 		Pageable mockPageable = PageRequest.of(mockPage - 1, mockSize);
 		Page<Post> mockPagePost = mock(Page.class);
 
-		when(postRepository.findAllByVisibilityStatusEqualsAndTitleContainingOrContentContainingOrderByCreatedAtDesc(
+		when(postRepository.findAllByVisibilityStatusEqualsAndTitleContainingOrContentContainingAndDeletedAtIsNullOrderByCreatedAtDesc(
 			VisibilityStatus.PUBLIC, mockQuery, mockQuery, mockPageable))
 			.thenReturn(mockPagePost);
 
@@ -49,7 +49,7 @@ class PostQueryServiceTest {
 		// then
 		assertThat(result).isEqualTo(mockPagePost);
 		verify(postRepository, times(1))
-			.findAllByVisibilityStatusEqualsAndTitleContainingOrContentContainingOrderByCreatedAtDesc(
+			.findAllByVisibilityStatusEqualsAndTitleContainingOrContentContainingAndDeletedAtIsNullOrderByCreatedAtDesc(
 				VisibilityStatus.PUBLIC, mockQuery, mockQuery, mockPageable
 			);
 	}
@@ -61,14 +61,14 @@ class PostQueryServiceTest {
 		Long mockPostId = 1L;
 		Post mockPost = mock(Post.class);
 
-		when(postRepository.findById(mockPostId)).thenReturn(Optional.of(mockPost));
+		when(postRepository.findByIdAndDeletedAtIsNull(mockPostId)).thenReturn(Optional.of(mockPost));
 
 		// when
 		Post result = postQueryService.findPostById(mockPostId);
 
 		// then
 		assertThat(result).isEqualTo(mockPost);
-		verify(postRepository, times(1)).findById(mockPostId);
+		verify(postRepository, times(1)).findByIdAndDeletedAtIsNull(mockPostId);
 	}
 
 	@Test
@@ -77,12 +77,12 @@ class PostQueryServiceTest {
 		// given
 		Long mockPostId = 0L;
 
-		when(postRepository.findById(mockPostId)).thenReturn(Optional.empty());
+		when(postRepository.findByIdAndDeletedAtIsNull(mockPostId)).thenReturn(Optional.empty());
 
 		// when | then
 		assertThatThrownBy(() -> postQueryService.findPostById(mockPostId))
 			.isInstanceOf(ApiException.class);
 
-		verify(postRepository, times(1)).findById(mockPostId);
+		verify(postRepository, times(1)).findByIdAndDeletedAtIsNull(mockPostId);
 	}
 }
