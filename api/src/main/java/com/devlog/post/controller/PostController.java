@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devlog.post.request.PostCreateRequest;
+import com.devlog.post.request.PostSearchRequest;
+import com.devlog.post.response.PagePostResult;
 import com.devlog.post.response.PostCreateResponse;
-import com.devlog.post.response.PostResponse;
+import com.devlog.post.response.PostDetailResponse;
 import com.devlog.post.service.PostApplicationService;
 import com.devlog.security.AuthRequired;
 import com.devlog.security.LoginUser;
@@ -40,9 +42,19 @@ public class PostController {
 		return ResponseEntity.ok(response);
 	}
 
+	@GetMapping("/search")
+	public ResponseEntity<PagePostResult> search(PostSearchRequest request) {
+		PagePostResult result = postApplicationService.search(request.query(), request.page(), request.size());
+
+		return ResponseEntity.ok(result);
+	}
+
 	@GetMapping("/{postId}")
-	public ResponseEntity<PostResponse> findPost(@LoginUser(required = false) User user, @PathVariable Long postId) {
-		PostResponse response = PostResponse.from(postApplicationService.findPost(postId), user);
+	public ResponseEntity<PostDetailResponse> findPost(
+		@LoginUser(required = false) User user,
+		@PathVariable Long postId
+	) {
+		PostDetailResponse response = PostDetailResponse.from(postApplicationService.findPost(postId), user);
 
 		return ResponseEntity.ok(response);
 	}

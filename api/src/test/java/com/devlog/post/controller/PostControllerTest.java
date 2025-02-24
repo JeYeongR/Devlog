@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.request.PostCreateRequest;
+import com.devlog.post.request.PostSearchRequest;
+import com.devlog.post.response.PagePostResult;
 import com.devlog.post.service.PostApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +60,24 @@ class PostControllerTest {
 		mockMvc.perform(post("/v1/posts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestJson))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("GET /v1/posts/search 포스트 검색 조회")
+	void searchTest() throws Exception {
+		// given
+		PostSearchRequest mockRequest = new PostSearchRequest("test", 1, 10);
+
+		// when
+		given(postApplicationService.search(mockRequest.query(), mockRequest.page(), mockRequest.size()))
+			.willReturn(mock(PagePostResult.class));
+
+		// then
+		mockMvc.perform(get("/v1/posts/search")
+				.param("query", mockRequest.query())
+				.param("page", String.valueOf(mockRequest.page()))
+				.param("size", String.valueOf(mockRequest.size())))
 			.andExpect(status().isOk());
 	}
 

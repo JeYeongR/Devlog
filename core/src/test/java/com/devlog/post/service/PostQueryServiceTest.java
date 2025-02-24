@@ -11,9 +11,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.devlog.exception.ApiException;
 import com.devlog.post.domain.Post;
+import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.repository.PostRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,6 +28,31 @@ class PostQueryServiceTest {
 
 	@InjectMocks
 	PostQueryService postQueryService;
+
+	@Test
+	@DisplayName("포스트 아이디로 포스트 정상 조회")
+	void findPostsTest() {
+		// given
+		String mockQuery = "test";
+		int mockPage = 1;
+		int mockSize = 10;
+		Pageable mockPageable = PageRequest.of(mockPage - 1, mockSize);
+		Page<Post> mockPagePost = mock(Page.class);
+
+		when(postRepository.findAllByVisibilityStatusEqualsAndTitleContainingOrContentContainingOrderByCreatedAtDesc(
+			VisibilityStatus.PUBLIC, mockQuery, mockQuery, mockPageable))
+			.thenReturn(mockPagePost);
+
+		// when
+		Page<Post> result = postQueryService.findPosts(mockQuery, mockPage, mockSize);
+
+		// then
+		assertThat(result).isEqualTo(mockPagePost);
+		verify(postRepository, times(1))
+			.findAllByVisibilityStatusEqualsAndTitleContainingOrContentContainingOrderByCreatedAtDesc(
+				VisibilityStatus.PUBLIC, mockQuery, mockQuery, mockPageable
+			);
+	}
 
 	@Test
 	@DisplayName("포스트 아이디로 포스트 정상 조회")

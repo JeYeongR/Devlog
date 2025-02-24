@@ -1,9 +1,11 @@
 package com.devlog.post.service;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
+import com.devlog.post.response.PagePostResult;
 import com.devlog.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,12 @@ public class PostApplicationService {
 			visibilityStatus,
 			user
 		));
+	}
+
+	public PagePostResult search(String query, int page, int size) {
+		Page<Post> pagePost = postQueryService.findPosts(query, page, size);
+
+		return PagePostResult.from(pagePost);
 	}
 
 	public Post findPost(Long postId) {

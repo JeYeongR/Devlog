@@ -9,9 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
+import com.devlog.post.response.PagePostResult;
 import com.devlog.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,6 +42,25 @@ class PostApplicationServiceTest {
 		// then
 		assertThat(result).isEqualTo(mockPost);
 		verify(postCommandService, times(1)).save(any(Post.class));
+	}
+
+	@Test
+	@DisplayName("포스트 검색 조회")
+	void searchTest() {
+		// given
+		String mockQuery = "test";
+		int mockPage = 1;
+		int mockSize = 10;
+		Page<Post> mockPost = mock(Page.class);
+
+		when(postQueryService.findPosts(mockQuery, mockPage, mockSize)).thenReturn(mockPost);
+
+		// when
+		PagePostResult result = postApplicationService.search(mockQuery, mockPage, mockSize);
+
+		// then
+		assertThat(result).isEqualTo(PagePostResult.from(mockPost));
+		verify(postQueryService, times(1)).findPosts(mockQuery, mockPage, mockSize);
 	}
 
 	@Test
