@@ -46,7 +46,7 @@ class PostControllerTest {
 	PostApplicationService postApplicationService;
 
 	@Test
-	@DisplayName("GET /v1/posts 포스트 생성")
+	@DisplayName("POST /v1/posts 포스트 생성")
 	void saveTest() throws Exception {
 		// given
 		PostCreateRequest request = new PostCreateRequest("Test Title", "Test Content", VisibilityStatus.PUBLIC);

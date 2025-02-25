@@ -1,4 +1,4 @@
-package com.devlog.domain;
+package com.devlog.comment.domain;
 
 import java.time.LocalDateTime;
 
@@ -44,4 +44,14 @@ public class Comment {
 
 	@Column(nullable = false)
 	private LocalDateTime modifiedAt;
+
+	public static Comment create(String content, User user, Post post) {
+		Comment comment = new Comment();
+		comment.content = content;
+		comment.user = user;
+		comment.post = post;
+		comment.createdAt = LocalDateTime.now();
+		comment.modifiedAt = comment.createdAt;
+		return comment;
+	}
 }
