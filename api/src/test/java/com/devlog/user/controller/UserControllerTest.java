@@ -40,10 +40,9 @@ class UserControllerTest {
 		Token token = Token.create("test-access-token", "test-refresh-token");
 		TokenResponse mockTokenResponse = TokenResponse.from(token);
 
-		// when
 		given(userApplicationService.login(code)).willReturn(mockTokenResponse);
 
-		// then
+		// when | then
 		mockMvc.perform(get("/v1/users/auth/callback").param("code", code))
 			.andExpect(status().isOk());
 	}

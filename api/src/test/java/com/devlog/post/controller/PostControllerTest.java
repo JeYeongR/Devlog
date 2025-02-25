@@ -1,5 +1,8 @@
 package com.devlog.post.controller;
 
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -52,15 +55,14 @@ class PostControllerTest {
 		PostCreateRequest request = new PostCreateRequest("Test Title", "Test Content", VisibilityStatus.PUBLIC);
 		String requestJson = objectMapper.writeValueAsString(request);
 
-		// when
 		given(postApplicationService.save(
-			any(String.class),
-			any(String.class),
+			anyString(),
+			anyString(),
 			any(VisibilityStatus.class),
 			any(User.class)))
 			.willReturn(mock(PostCreateResponse.class));
 
-		// then
+		// when | then
 		mockMvc.perform(post("/v1/posts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestJson))
@@ -73,11 +75,10 @@ class PostControllerTest {
 		// given
 		PostSearchRequest mockRequest = new PostSearchRequest("test", 1, 10);
 
-		// when
 		given(postApplicationService.search(mockRequest.query(), mockRequest.page(), mockRequest.size()))
 			.willReturn(mock(PagePostResult.class));
 
-		// then
+		// when | then
 		mockMvc.perform(get("/v1/posts/search")
 				.param("query", mockRequest.query())
 				.param("page", String.valueOf(mockRequest.page()))
@@ -95,11 +96,10 @@ class PostControllerTest {
 
 		when(mockPost.getUser()).thenReturn(mockUser);
 
-		// when
 		given(postApplicationService.findPost(mockPostId, mockUser))
 			.willReturn(mock(PostDetailResponse.class));
 
-		// then
+		// when | then
 		mockMvc.perform(get("/v1/posts/{postId}", mockPostId.toString()))
 			.andExpect(status().isOk());
 	}
@@ -112,16 +112,15 @@ class PostControllerTest {
 		PostUpdateRequest request = new PostUpdateRequest("Test Title", "Test Content", VisibilityStatus.PUBLIC);
 		String requestJson = objectMapper.writeValueAsString(request);
 
-		// when
 		given(postApplicationService.update(
-			any(Long.class),
-			any(String.class),
-			any(String.class),
+			anyLong(),
+			anyString(),
+			anyString(),
 			any(VisibilityStatus.class),
 			any(User.class)))
 			.willReturn(mock(PostUpdateResponse.class));
 
-		// then
+		// when | then
 		mockMvc.perform(patch("/v1/posts/{postId}", mockPostId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestJson))
@@ -134,9 +133,9 @@ class PostControllerTest {
 		// given
 		Long mockPostId = 1L;
 
-		// when
+		willDoNothing().given(postApplicationService).delete(anyLong(), any(User.class));
 
-		// then
+		// when | then
 		mockMvc.perform(delete("/v1/posts/{postId}", mockPostId)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNoContent());

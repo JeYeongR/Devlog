@@ -1,5 +1,6 @@
 package com.devlog.comment.controller;
 
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.devlog.comment.request.CommentCreateRequest;
 import com.devlog.comment.service.CommentApplicationService;
+import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(
@@ -43,9 +45,9 @@ class CommentControllerTest {
 		CommentCreateRequest request = new CommentCreateRequest("Test Content");
 		String requestJson = objectMapper.writeValueAsString(request);
 
-		// when
+		willDoNothing().given(commentApplicationService).save(any(User.class), anyLong(), anyString());
 
-		// then
+		// when || then
 		mockMvc.perform(post("/v1/posts/{postId}/comments", mockPostId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestJson))
