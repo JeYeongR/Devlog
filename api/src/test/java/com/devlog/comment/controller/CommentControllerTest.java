@@ -4,6 +4,8 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,20 @@ class CommentControllerTest {
 		mockMvc.perform(post("/v1/posts/{postId}/comments", mockPostId)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestJson))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("GET /v1/posts/{postId}/comments 코멘트 조회")
+	void findCommentsTest() throws Exception {
+		// given
+		Long mockPostId = 1L;
+
+		given(commentApplicationService.findComments(mockPostId, mock(User.class)))
+			.willReturn(mock(List.class));
+
+		// when || then
+		mockMvc.perform(get("/v1/posts/{postId}/comments", mockPostId))
 			.andExpect(status().isOk());
 	}
 }

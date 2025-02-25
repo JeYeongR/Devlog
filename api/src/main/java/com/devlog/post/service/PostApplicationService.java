@@ -9,7 +9,7 @@ import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorType;
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
-import com.devlog.post.response.PagePostResult;
+import com.devlog.post.response.PagePostResponse;
 import com.devlog.post.response.PostCreateResponse;
 import com.devlog.post.response.PostDetailResponse;
 import com.devlog.post.response.PostUpdateResponse;
@@ -44,10 +44,10 @@ public class PostApplicationService {
 	}
 
 	@Transactional(readOnly = true)
-	public PagePostResult search(String query, int page, int size) {
+	public PagePostResponse search(String query, int page, int size) {
 		Page<Post> pagePost = postQueryService.findPosts(query, page, size);
 
-		return PagePostResult.from(pagePost);
+		return PagePostResponse.from(pagePost);
 	}
 
 	@Transactional(readOnly = true)

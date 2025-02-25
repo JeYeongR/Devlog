@@ -22,7 +22,7 @@ import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.request.PostCreateRequest;
 import com.devlog.post.request.PostSearchRequest;
 import com.devlog.post.request.PostUpdateRequest;
-import com.devlog.post.response.PagePostResult;
+import com.devlog.post.response.PagePostResponse;
 import com.devlog.post.response.PostCreateResponse;
 import com.devlog.post.response.PostDetailResponse;
 import com.devlog.post.response.PostUpdateResponse;
@@ -76,7 +76,7 @@ class PostControllerTest {
 		PostSearchRequest mockRequest = new PostSearchRequest("test", 1, 10);
 
 		given(postApplicationService.search(mockRequest.query(), mockRequest.page(), mockRequest.size()))
-			.willReturn(mock(PagePostResult.class));
+			.willReturn(mock(PagePostResponse.class));
 
 		// when | then
 		mockMvc.perform(get("/v1/posts/search")

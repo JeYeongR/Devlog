@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devlog.post.request.PostCreateRequest;
 import com.devlog.post.request.PostSearchRequest;
 import com.devlog.post.request.PostUpdateRequest;
-import com.devlog.post.response.PagePostResult;
+import com.devlog.post.response.PagePostResponse;
 import com.devlog.post.response.PostCreateResponse;
 import com.devlog.post.response.PostDetailResponse;
 import com.devlog.post.response.PostUpdateResponse;
@@ -47,8 +47,8 @@ public class PostController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<PagePostResult> search(PostSearchRequest request) {
-		PagePostResult result = postApplicationService.search(request.query(), request.page(), request.size());
+	public ResponseEntity<PagePostResponse> search(PostSearchRequest request) {
+		PagePostResponse result = postApplicationService.search(request.query(), request.page(), request.size());
 
 		return ResponseEntity.ok(result);
 	}

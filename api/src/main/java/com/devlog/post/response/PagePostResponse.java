@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 import com.devlog.post.domain.Post;
 
-public record PagePostResult(
+public record PagePostResponse(
 
 	int page,
 
@@ -17,8 +17,8 @@ public record PagePostResult(
 	List<PostResponse> contents
 ) {
 
-	public static PagePostResult from(Page<Post> pagePost) {
-		return new PagePostResult(
+	public static PagePostResponse from(Page<Post> pagePost) {
+		return new PagePostResponse(
 			pagePost.getNumber(),
 			pagePost.getSize(),
 			pagePost.getTotalElements(),

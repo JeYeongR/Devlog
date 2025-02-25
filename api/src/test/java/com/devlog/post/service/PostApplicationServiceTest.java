@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 import com.devlog.exception.ApiException;
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
-import com.devlog.post.response.PagePostResult;
+import com.devlog.post.response.PagePostResponse;
 import com.devlog.post.response.PostCreateResponse;
 import com.devlog.post.response.PostDetailResponse;
 import com.devlog.post.response.PostUpdateResponse;
@@ -61,10 +61,10 @@ class PostApplicationServiceTest {
 		when(postQueryService.findPosts(mockQuery, mockPage, mockSize)).thenReturn(mockPost);
 
 		// when
-		PagePostResult result = postApplicationService.search(mockQuery, mockPage, mockSize);
+		PagePostResponse result = postApplicationService.search(mockQuery, mockPage, mockSize);
 
 		// then
-		assertThat(result).isEqualTo(PagePostResult.from(mockPost));
+		assertThat(result).isEqualTo(PagePostResponse.from(mockPost));
 		verify(postQueryService, times(1)).findPosts(mockQuery, mockPage, mockSize);
 	}
 
