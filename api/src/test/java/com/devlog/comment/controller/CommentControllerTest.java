@@ -88,4 +88,18 @@ class CommentControllerTest {
 				.content(requestJson))
 			.andExpect(status().isOk());
 	}
+
+	@Test
+	@DisplayName("DELETE /v1/posts/{postId}/comments/{commentId} 코멘트 삭제")
+	void deleteTest() throws Exception {
+		// given
+		Long mockCommentId = 1L;
+		Long mockPostId = 1L;
+
+		willDoNothing().given(commentApplicationService).delete(any(User.class), anyLong());
+
+		// when || then
+		mockMvc.perform(delete("/v1/posts/{postId}/comments/{commentId}", mockPostId, mockCommentId))
+			.andExpect(status().isOk());
+	}
 }

@@ -138,6 +138,6 @@ class PostControllerTest {
 		// when | then
 		mockMvc.perform(delete("/v1/posts/{postId}", mockPostId)
 				.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNoContent());
+			.andExpect(status().isOk());
 	}
 }

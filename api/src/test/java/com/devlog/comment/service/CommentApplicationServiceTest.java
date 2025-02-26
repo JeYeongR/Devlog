@@ -115,4 +115,40 @@ class CommentApplicationServiceTest {
 
 		verify(commentQueryService, times(1)).findCommentById(mockCommentId);
 	}
+
+	@Test
+	@DisplayName("코멘트 정상 삭제")
+	void deleteTest() {
+		// given
+		Long mockCommentId = 1L;
+		Comment mockComment = mock(Comment.class);
+		User mockUser = mock(User.class);
+		when(mockComment.getUser()).thenReturn(mockUser);
+
+		when(commentQueryService.findCommentById(mockCommentId)).thenReturn(mockComment);
+
+		// when
+		commentApplicationService.delete(mockUser, mockCommentId);
+
+		// then
+		verify(commentQueryService, times(1)).findCommentById(mockCommentId);
+	}
+
+	@Test
+	@DisplayName("작성자가 아닌 코멘트 삭제")
+	void deleteTestForbidden() {
+		// given
+		Long mockCommentId = 1L;
+		Comment mockComment = mock(Comment.class);
+		User mockUser = mock(User.class);
+		when(mockComment.getUser()).thenReturn(mockUser);
+
+		when(commentQueryService.findCommentById(mockCommentId)).thenReturn(mockComment);
+
+		// when | then
+		assertThatThrownBy(() -> commentApplicationService.delete(mock(User.class), mockCommentId))
+			.isInstanceOf(ApiException.class);
+
+		verify(commentQueryService, times(1)).findCommentById(mockCommentId);
+	}
 }

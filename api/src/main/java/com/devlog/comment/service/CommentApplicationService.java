@@ -52,4 +52,15 @@ public class CommentApplicationService {
 
 		comment.update(content);
 	}
+
+	@Transactional
+	public void delete(User user, Long commentId) {
+		Comment comment = commentQueryService.findCommentById(commentId);
+
+		if (!comment.getUser().equals(user)) {
+			throw new ApiException("코멘트는 작성자만 삭제할 수 있습니다.", ErrorType.FORBIDDEN, HttpStatus.FORBIDDEN);
+		}
+
+		comment.delete();
+	}
 }

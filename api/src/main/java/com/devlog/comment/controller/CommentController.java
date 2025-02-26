@@ -3,6 +3,7 @@ package com.devlog.comment.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,6 +62,18 @@ public class CommentController {
 		@RequestBody CommentUpdateRequest request
 	) {
 		commentApplicationService.update(user, commentId, request.content());
+
+		return ResponseEntity.ok().build();
+	}
+
+	@AuthRequired
+	@DeleteMapping("/{commentId}")
+	public ResponseEntity<Void> delete(
+		@LoginUser User user,
+		@PathVariable Long postId,
+		@PathVariable Long commentId
+	) {
+		commentApplicationService.delete(user, commentId);
 
 		return ResponseEntity.ok().build();
 	}
