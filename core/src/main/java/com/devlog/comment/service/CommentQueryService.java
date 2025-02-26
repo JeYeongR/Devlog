@@ -21,11 +21,11 @@ public class CommentQueryService {
 	private final CommentRepository commentRepository;
 
 	public List<Comment> findComments(Long postId) {
-		return commentRepository.findAllByPostIdOrderByCreatedAtAsc(postId);
+		return commentRepository.findAllByPostIdAndDeletedAtIsNullOrderByCreatedAtAsc(postId);
 	}
 
 	public Comment findCommentById(Long commentId) {
-		return commentRepository.findById(commentId)
+		return commentRepository.findByIdAndDeletedAtIsNull(commentId)
 			.orElseThrow(() -> new ApiException("코멘트를 찾을 수 없습니다.", ErrorType.NOT_FOUND, HttpStatus.NOT_FOUND));
 	}
 }

@@ -33,7 +33,7 @@ class CommentQueryServiceTest {
 		Long mockPostId = 1L;
 		List<Comment> mockComments = mock(List.class);
 
-		when(commentRepository.findAllByPostIdOrderByCreatedAtAsc(mockPostId))
+		when(commentRepository.findAllByPostIdAndDeletedAtIsNullOrderByCreatedAtAsc(mockPostId))
 			.thenReturn(mockComments);
 
 		// when
@@ -41,7 +41,7 @@ class CommentQueryServiceTest {
 
 		// then
 		assertThat(result).isEqualTo(mockComments);
-		verify(commentRepository, times(1)).findAllByPostIdOrderByCreatedAtAsc(mockPostId);
+		verify(commentRepository, times(1)).findAllByPostIdAndDeletedAtIsNullOrderByCreatedAtAsc(mockPostId);
 	}
 
 	@Test
@@ -51,7 +51,7 @@ class CommentQueryServiceTest {
 		Long mockPostId = 1L;
 		Comment mockComment = mock(Comment.class);
 
-		when(commentRepository.findById(mockPostId))
+		when(commentRepository.findByIdAndDeletedAtIsNull(mockPostId))
 			.thenReturn(Optional.of(mockComment));
 
 		// when
@@ -59,21 +59,21 @@ class CommentQueryServiceTest {
 
 		// then
 		assertThat(result).isEqualTo(mockComment);
-		verify(commentRepository, times(1)).findById(mockPostId);
+		verify(commentRepository, times(1)).findByIdAndDeletedAtIsNull(mockPostId);
 	}
 
 	@Test
-	@DisplayName("코멘트 아이디로 존재하지 않는 코멘트 조회")
+	@DisplayName("코멘트 아이디로 존재하지 않는 코멘트 단건 조회")
 	void findCommentByIdTestNotFound() {
 		// given
 		Long mockPostId = 0L;
 
-		when(commentRepository.findById(mockPostId)).thenReturn(Optional.empty());
+		when(commentRepository.findByIdAndDeletedAtIsNull(mockPostId)).thenReturn(Optional.empty());
 
 		// when | then
 		assertThatThrownBy(() -> commentQueryService.findCommentById(mockPostId))
 			.isInstanceOf(ApiException.class);
 
-		verify(commentRepository, times(1)).findById(mockPostId);
+		verify(commentRepository, times(1)).findByIdAndDeletedAtIsNull(mockPostId);
 	}
 }

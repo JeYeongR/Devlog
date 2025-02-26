@@ -86,6 +86,6 @@ public class PostController {
 	public ResponseEntity<Void> delete(@LoginUser User user, @PathVariable Long postId) {
 		postApplicationService.delete(postId, user);
 
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 }

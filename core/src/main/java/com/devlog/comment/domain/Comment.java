@@ -45,6 +45,9 @@ public class Comment {
 	@Column(nullable = false)
 	private LocalDateTime modifiedAt;
 
+	@Column
+	private LocalDateTime deletedAt;
+
 	public static Comment create(String content, User user, Post post) {
 		Comment comment = new Comment();
 		comment.content = content;
@@ -58,5 +61,9 @@ public class Comment {
 	public void update(String content) {
 		this.content = content;
 		this.modifiedAt = LocalDateTime.now();
+	}
+
+	public void delete() {
+		this.deletedAt = LocalDateTime.now();
 	}
 }
