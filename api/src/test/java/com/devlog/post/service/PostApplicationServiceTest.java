@@ -162,7 +162,8 @@ class PostApplicationServiceTest {
 		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
 
 		// when | then
-		assertThatThrownBy(() -> postApplicationService.update(mockPostId,
+		assertThatThrownBy(() -> postApplicationService.update(
+			mockPostId,
 			"title",
 			"content",
 			VisibilityStatus.PUBLIC,

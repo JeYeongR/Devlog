@@ -92,6 +92,6 @@ public class PostApplicationService {
 			throw new ApiException("작성자만 삭제할 수 있습니다.", ErrorType.FORBIDDEN, HttpStatus.FORBIDDEN);
 		}
 
-		post.delete(user);
+		post.delete();
 	}
 }

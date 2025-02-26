@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devlog.comment.request.CommentCreateRequest;
+import com.devlog.comment.request.CommentUpdateRequest;
 import com.devlog.comment.response.CommentResponse;
 import com.devlog.comment.service.CommentApplicationService;
 import com.devlog.security.AuthRequired;
@@ -48,5 +50,18 @@ public class CommentController {
 		List<CommentResponse> response = commentApplicationService.findComments(postId, user);
 
 		return ResponseEntity.ok(response);
+	}
+
+	@AuthRequired
+	@PatchMapping("/{commentId}")
+	public ResponseEntity<Void> update(
+		@LoginUser User user,
+		@PathVariable String postId,
+		@PathVariable Long commentId,
+		@RequestBody CommentUpdateRequest request
+	) {
+		commentApplicationService.update(user, commentId, request.content());
+
+		return ResponseEntity.ok().build();
 	}
 }

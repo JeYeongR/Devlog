@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.devlog.comment.domain.Comment;
 import com.devlog.comment.response.CommentResponse;
+import com.devlog.exception.ApiException;
 import com.devlog.post.domain.Post;
 import com.devlog.post.service.PostQueryService;
 import com.devlog.user.domain.User;
@@ -52,7 +53,7 @@ class CommentApplicationServiceTest {
 	}
 
 	@Test
-	@DisplayName("코멘트 생성")
+	@DisplayName("코멘트 조회")
 	void findCommentsTest() {
 		// given
 		Long mockPostId = 1L;
@@ -70,5 +71,48 @@ class CommentApplicationServiceTest {
 		// then
 		assertThat(result).isEqualTo(mockCommentResponses);
 		verify(commentQueryService, times(1)).findComments(mockPostId);
+	}
+
+	@Test
+	@DisplayName("코멘트 정상 수정")
+	void updateTest() {
+		// given
+		Long mockCommentId = 1L;
+		Comment mockComment = mock(Comment.class);
+		User mockUser = mock(User.class);
+		when(mockComment.getUser()).thenReturn(mockUser);
+
+		when(commentQueryService.findCommentById(mockCommentId)).thenReturn(mockComment);
+
+		// when
+		commentApplicationService.update(
+			mockUser,
+			mockCommentId,
+			"test-content"
+		);
+
+		// then
+		verify(commentQueryService, times(1)).findCommentById(mockCommentId);
+	}
+
+	@Test
+	@DisplayName("작성자가 아닌 코멘트 수정")
+	void updateTestForbidden() {
+		// given
+		Long mockCommentId = 1L;
+		Comment mockComment = mock(Comment.class);
+		User mockUser = mock(User.class);
+		when(mockComment.getUser()).thenReturn(mockUser);
+
+		when(commentQueryService.findCommentById(mockCommentId)).thenReturn(mockComment);
+
+		// when | then
+		assertThatThrownBy(() -> commentApplicationService.update(
+			mock(User.class),
+			mockCommentId,
+			"test-content"))
+			.isInstanceOf(ApiException.class);
+
+		verify(commentQueryService, times(1)).findCommentById(mockCommentId);
 	}
 }

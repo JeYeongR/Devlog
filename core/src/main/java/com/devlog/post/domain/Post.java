@@ -70,7 +70,7 @@ public class Post {
 		this.modifiedAt = LocalDateTime.now();
 	}
 
-	public void delete(User user) {
+	public void delete() {
 		this.deletedAt = LocalDateTime.now();
 	}
 }

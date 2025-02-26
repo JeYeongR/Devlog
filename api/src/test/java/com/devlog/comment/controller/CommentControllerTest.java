@@ -17,6 +17,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.devlog.comment.request.CommentCreateRequest;
+import com.devlog.comment.request.CommentUpdateRequest;
 import com.devlog.comment.service.CommentApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -67,6 +68,24 @@ class CommentControllerTest {
 
 		// when || then
 		mockMvc.perform(get("/v1/posts/{postId}/comments", mockPostId))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("PATCH /v1/posts/{postId}/comments/{commentId} 코멘트 수정")
+	void updateTest() throws Exception {
+		// given
+		Long mockCommentId = 1L;
+		Long mockPostId = 1L;
+		CommentUpdateRequest request = new CommentUpdateRequest("Test Content");
+		String requestJson = objectMapper.writeValueAsString(request);
+
+		willDoNothing().given(commentApplicationService).update(any(User.class), anyLong(), anyString());
+
+		// when || then
+		mockMvc.perform(patch("/v1/posts/{postId}/comments/{commentId}", mockPostId, mockCommentId)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(requestJson))
 			.andExpect(status().isOk());
 	}
 }

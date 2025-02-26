@@ -55,7 +55,7 @@ class PostQueryServiceTest {
 	}
 
 	@Test
-	@DisplayName("포스트 아이디로 포스트 정상 조회")
+	@DisplayName("포스트 아이디로 포스트 단건 정상 조회")
 	void findPostByIdTest() {
 		// given
 		Long mockPostId = 1L;
