@@ -1,4 +1,4 @@
-package com.devlog.domain;
+package com.devlog.follow.domain;
 
 import java.time.LocalDateTime;
 
@@ -37,4 +37,12 @@ public class Follow {
 
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;
+
+	public static Follow create(User follower, User followedUser) {
+		Follow follow = new Follow();
+		follow.follower = follower;
+		follow.followedUser = followedUser;
+		follow.createdAt = LocalDateTime.now();
+		return follow;
+	}
 }

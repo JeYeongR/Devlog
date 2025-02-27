@@ -11,7 +11,9 @@ public enum ErrorType {
 	NO_RESOURCE("존재하지 않는 리소스입니다."),
 	UNAUTHORIZED("인증되지 않은 사용자입니다."),
 	NOT_FOUND("찾을 수 없는 리소스입니다."),
-	FORBIDDEN("권한이 없습니다.");
+	FORBIDDEN("권한이 없습니다."),
+	CONFLICT("이미 존재하는 리소스입니다."),
+	BAD_REQUEST("잘못된 요청입니다.");
 
 	ErrorType(String description) {
 		this.description = description;
