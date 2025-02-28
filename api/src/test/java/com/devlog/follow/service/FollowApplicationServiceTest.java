@@ -134,7 +134,7 @@ class FollowApplicationServiceTest {
 
 	@Test
 	@DisplayName("존재하지 않는 언팔로우 시도")
-	void unfollowTestConflict() {
+	void unfollowTestNotFound() {
 		// given
 		Long mockFollowedUserId = 1L;
 		User mockFollower = mock(User.class);
