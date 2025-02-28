@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,14 +42,14 @@ class FollowApplicationServiceTest {
 		User mockFollowedUser = mock(User.class);
 
 		when(userQueryService.findUserById(mockFollowedUserId)).thenReturn(mockFollowedUser);
-		when(followQueryService.isFollowing(mockFollower, mockFollowedUser)).thenReturn(false);
+		when(followQueryService.findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser))
+			.thenReturn(Optional.empty());
 
-		// when
+		// when || then
 		followApplicationService.follow(mockFollower, mockFollowedUserId);
 
-		// then
 		verify(userQueryService, times(1)).findUserById(mockFollowedUserId);
-		verify(followQueryService, times(1)).isFollowing(mockFollower, mockFollowedUser);
+		verify(followQueryService, times(1)).findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser);
 		verify(followCommandService, times(1)).save(any(Follow.class));
 	}
 
@@ -60,13 +62,12 @@ class FollowApplicationServiceTest {
 
 		when(userQueryService.findUserById(mockFollowedUserId)).thenReturn(mockFollower);
 
-		// when
+		// when || then
 		assertThatThrownBy(() -> followApplicationService.follow(mockFollower, mockFollowedUserId))
 			.isInstanceOf(ApiException.class);
 
-		// then
 		verify(userQueryService, times(1)).findUserById(mockFollowedUserId);
-		verify(followQueryService, times(0)).isFollowing(mockFollower, mockFollower);
+		verify(followQueryService, times(0)).findFollowByFollowerAndFollowedUser(mockFollower, mockFollower);
 		verify(followCommandService, times(0)).save(any(Follow.class));
 	}
 
@@ -79,15 +80,75 @@ class FollowApplicationServiceTest {
 		User mockFollowedUser = mock(User.class);
 
 		when(userQueryService.findUserById(mockFollowedUserId)).thenReturn(mockFollowedUser);
-		when(followQueryService.isFollowing(mockFollower, mockFollowedUser)).thenReturn(true);
+		when(followQueryService.findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser))
+			.thenReturn(Optional.of(mock(Follow.class)));
 
-		// when
+		// when || then
 		assertThatThrownBy(() -> followApplicationService.follow(mockFollower, mockFollowedUserId))
 			.isInstanceOf(ApiException.class);
 
-		// then
 		verify(userQueryService, times(1)).findUserById(mockFollowedUserId);
-		verify(followQueryService, times(1)).isFollowing(mockFollower, mockFollowedUser);
+		verify(followQueryService, times(1)).findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser);
 		verify(followCommandService, times(0)).save(any(Follow.class));
+	}
+
+	@Test
+	@DisplayName("언팔로우 성공(삭제)")
+	void unfollowTest() {
+		// given
+		Long mockFollowedUserId = 1L;
+		User mockFollower = mock(User.class);
+		User mockFollowedUser = mock(User.class);
+		Follow mockFollow = mock(Follow.class);
+
+		when(userQueryService.findUserById(mockFollowedUserId)).thenReturn(mockFollowedUser);
+		when(followQueryService.findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser))
+			.thenReturn(Optional.of(mockFollow));
+
+		// when || then
+		followApplicationService.unfollow(mockFollower, mockFollowedUserId);
+
+		verify(userQueryService, times(1)).findUserById(mockFollowedUserId);
+		verify(followQueryService, times(1)).findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser);
+		verify(followCommandService, times(1)).delete(mockFollow);
+	}
+
+	@Test
+	@DisplayName("같은 사용자 언팔로우 시도")
+	void unfollowTestBadRequest() {
+		// given
+		Long mockFollowedUserId = 1L;
+		User mockFollower = mock(User.class);
+
+		when(userQueryService.findUserById(mockFollowedUserId)).thenReturn(mockFollower);
+
+		// when || then
+		assertThatThrownBy(() -> followApplicationService.unfollow(mockFollower, mockFollowedUserId))
+			.isInstanceOf(ApiException.class);
+
+		verify(userQueryService, times(1)).findUserById(mockFollowedUserId);
+		verify(followQueryService, times(0)).findFollowByFollowerAndFollowedUser(mockFollower, mockFollower);
+		verify(followCommandService, times(0)).delete(any(Follow.class));
+	}
+
+	@Test
+	@DisplayName("존재하지 않는 언팔로우 시도")
+	void unfollowTestConflict() {
+		// given
+		Long mockFollowedUserId = 1L;
+		User mockFollower = mock(User.class);
+		User mockFollowedUser = mock(User.class);
+
+		when(userQueryService.findUserById(mockFollowedUserId)).thenReturn(mockFollowedUser);
+		when(followQueryService.findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser))
+			.thenReturn(Optional.empty());
+
+		// when || then
+		assertThatThrownBy(() -> followApplicationService.unfollow(mockFollower, mockFollowedUserId))
+			.isInstanceOf(ApiException.class);
+
+		verify(userQueryService, times(1)).findUserById(mockFollowedUserId);
+		verify(followQueryService, times(1)).findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser);
+		verify(followCommandService, times(0)).delete(any(Follow.class));
 	}
 }

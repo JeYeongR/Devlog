@@ -18,4 +18,8 @@ public class FollowCommandService {
 	public void save(Follow follow) {
 		followRepository.save(follow);
 	}
+
+	public void delete(Follow follow) {
+		followRepository.delete(follow);
+	}
 }

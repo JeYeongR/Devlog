@@ -1,7 +1,10 @@
 package com.devlog.follow.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.devlog.follow.domain.Follow;
 import com.devlog.follow.repository.FollowRepository;
 import com.devlog.user.domain.User;
 
@@ -15,7 +18,7 @@ public class FollowQueryService {
 
 	private final FollowRepository followRepository;
 
-	public boolean isFollowing(User follower, User followedUser) {
-		return followRepository.existsByFollowerAndFollowedUser(follower, followedUser);
+	public Optional<Follow> findFollowByFollowerAndFollowedUser(User follower, User followedUser) {
+		return followRepository.findByFollowerAndFollowedUser(follower, followedUser);
 	}
 }

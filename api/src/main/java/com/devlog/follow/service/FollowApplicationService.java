@@ -30,10 +30,25 @@ public class FollowApplicationService {
 			throw new ApiException("자기 자신을 팔로우할 수 없습니다.", ErrorType.BAD_REQUEST, HttpStatus.BAD_REQUEST);
 		}
 
-		if (followQueryService.isFollowing(follower, followedUser)) {
-			throw new ApiException("이미 팔로우 중입니다.", ErrorType.CONFLICT, HttpStatus.CONFLICT);
-		}
+		followQueryService.findFollowByFollowerAndFollowedUser(follower, followedUser)
+			.ifPresent(follow -> {
+				throw new ApiException("이미 팔로우 중입니다.", ErrorType.CONFLICT, HttpStatus.CONFLICT);
+			});
 
 		followCommandService.save(Follow.create(follower, followedUser));
+	}
+
+	@Transactional
+	public void unfollow(User follower, Long followedUserId) {
+		User followedUser = userQueryService.findUserById(followedUserId);
+
+		if (follower.equals(followedUser)) {
+			throw new ApiException("자기 자신을 언팔로우할 수 없습니다.", ErrorType.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+		}
+
+		Follow follow = followQueryService.findFollowByFollowerAndFollowedUser(follower, followedUser)
+			.orElseThrow(() -> new ApiException("팔로우 관계가 존재하지 않습니다.", ErrorType.NOT_FOUND, HttpStatus.NOT_FOUND));
+
+		followCommandService.delete(follow);
 	}
 }

@@ -54,4 +54,21 @@ class FollowControllerTest {
 				.content(requestJson))
 			.andExpect(status().isOk());
 	}
+
+	@Test
+	@DisplayName("POST /v1/follows 팔로우 생성")
+	void unfollowTest() throws Exception {
+		// given
+		Long mockFollowedUserId = 1L;
+		FollowCreateRequest request = new FollowCreateRequest(mockFollowedUserId);
+		String requestJson = objectMapper.writeValueAsString(request);
+
+		willDoNothing().given(followApplicationService).unfollow(any(User.class), anyLong());
+
+		// when || then
+		mockMvc.perform(delete("/v1/follows")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(requestJson))
+			.andExpect(status().isOk());
+	}
 }

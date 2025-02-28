@@ -35,4 +35,17 @@ class FollowCommandServiceTest {
 		// then
 		verify(followRepository, times(1)).save(mockFollow);
 	}
+
+	@Test
+	@DisplayName("팔로우 정상 삭제")
+	void deleteTest() {
+		// given
+		Follow mockFollow = mock(Follow.class);
+
+		// when
+		followCommandService.delete(mockFollow);
+
+		// then
+		verify(followRepository, times(1)).delete(mockFollow);
+	}
 }
