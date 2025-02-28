@@ -16,6 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.devlog.follow.request.FollowCreateRequest;
+import com.devlog.follow.request.FollowDeleteRequest;
 import com.devlog.follow.service.FollowApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,11 +57,11 @@ class FollowControllerTest {
 	}
 
 	@Test
-	@DisplayName("POST /v1/follows 팔로우 생성")
+	@DisplayName("DELETE /v1/follows 팔로우 생성")
 	void unfollowTest() throws Exception {
 		// given
 		Long mockFollowedUserId = 1L;
-		FollowCreateRequest request = new FollowCreateRequest(mockFollowedUserId);
+		FollowDeleteRequest request = new FollowDeleteRequest(mockFollowedUserId);
 		String requestJson = objectMapper.writeValueAsString(request);
 
 		willDoNothing().given(followApplicationService).unfollow(any(User.class), anyLong());
