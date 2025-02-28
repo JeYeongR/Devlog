@@ -57,7 +57,7 @@ class FollowControllerTest {
 	}
 
 	@Test
-	@DisplayName("DELETE /v1/follows 팔로우 생성")
+	@DisplayName("DELETE /v1/follows 팔로우 삭제")
 	void unfollowTest() throws Exception {
 		// given
 		Long mockFollowedUserId = 1L;

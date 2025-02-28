@@ -45,9 +45,10 @@ class FollowApplicationServiceTest {
 		when(followQueryService.findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser))
 			.thenReturn(Optional.empty());
 
-		// when || then
+		// when
 		followApplicationService.follow(mockFollower, mockFollowedUserId);
 
+		// then
 		verify(userQueryService, times(1)).findUserById(mockFollowedUserId);
 		verify(followQueryService, times(1)).findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser);
 		verify(followCommandService, times(1)).save(any(Follow.class));

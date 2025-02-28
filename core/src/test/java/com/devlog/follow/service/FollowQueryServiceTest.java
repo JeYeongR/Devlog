@@ -41,8 +41,7 @@ class FollowQueryServiceTest {
 			followQueryService.findFollowByFollowerAndFollowedUser(mockFollower, mockFollowedUser);
 
 		// then
-		assertThat(result).isPresent();
-		assertThat(result.get()).isEqualTo(mockFollow);
+		assertThat(result).isPresent().contains(mockFollow);
 		verify(followRepository, times(1)).findByFollowerAndFollowedUser(mockFollower, mockFollowedUser);
 	}
 }
