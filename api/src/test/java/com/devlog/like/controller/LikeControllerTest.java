@@ -40,7 +40,7 @@ class LikeControllerTest {
 
 	@Test
 	@DisplayName("POST /v1/likes 라이크 생성")
-	void followTest() throws Exception {
+	void likeTest() throws Exception {
 		// given
 		Long mockFollowedUserId = 1L;
 		FollowCreateRequest request = new FollowCreateRequest(mockFollowedUserId);
@@ -50,6 +50,23 @@ class LikeControllerTest {
 
 		// when || then
 		mockMvc.perform(post("/v1/likes")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(requestJson))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("DELETE /v1/likes 라이크 삭제")
+	void unlikeTest() throws Exception {
+		// given
+		Long mockFollowedUserId = 1L;
+		FollowCreateRequest request = new FollowCreateRequest(mockFollowedUserId);
+		String requestJson = objectMapper.writeValueAsString(request);
+
+		willDoNothing().given(likeApplicationService).unlike(any(User.class), anyLong());
+
+		// when || then
+		mockMvc.perform(delete("/v1/likes")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestJson))
 			.andExpect(status().isOk());

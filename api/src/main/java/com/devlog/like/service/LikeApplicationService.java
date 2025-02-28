@@ -25,10 +25,20 @@ public class LikeApplicationService {
 	public void like(User user, Long postId) {
 		Post post = postQueryService.findPostById(postId);
 
-		likeQueryService.findLikeByUserAndPost(user, post).ifPresent(like -> {
-			throw new ApiException("이미 좋아요를 누른 게시물입니다.", ErrorType.CONFLICT, HttpStatus.CONFLICT);
-		});
+		likeQueryService.findLikeByUserAndPost(user, post)
+			.ifPresent(like -> {
+				throw new ApiException("이미 좋아요를 누른 게시물입니다.", ErrorType.CONFLICT, HttpStatus.CONFLICT);
+			});
 
 		likeCommandService.save(Like.create(user, post));
+	}
+
+	public void unlike(User user, Long postId) {
+		Post post = postQueryService.findPostById(postId);
+
+		Like like = likeQueryService.findLikeByUserAndPost(user, post)
+			.orElseThrow(() -> new ApiException("좋아요를 누르지 않은 게시물입니다.", ErrorType.NOT_FOUND, HttpStatus.NOT_FOUND));
+
+		likeCommandService.delete(like);
 	}
 }

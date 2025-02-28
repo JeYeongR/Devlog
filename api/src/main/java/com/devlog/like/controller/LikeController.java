@@ -1,6 +1,7 @@
 package com.devlog.like.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,14 @@ public class LikeController {
 	@PostMapping
 	public ResponseEntity<Void> like(@LoginUser User user, @RequestBody LikeCreateRequest request) {
 		likeApplicationService.like(user, request.postId());
+
+		return ResponseEntity.ok().build();
+	}
+
+	@AuthRequired
+	@DeleteMapping
+	public ResponseEntity<Void> unlike(@LoginUser User user, @RequestBody LikeCreateRequest request) {
+		likeApplicationService.unlike(user, request.postId());
 
 		return ResponseEntity.ok().build();
 	}

@@ -18,4 +18,8 @@ public class LikeCommandService {
 	public void save(Like like) {
 		likeRepository.save(like);
 	}
+
+	public void delete(Like like) {
+		likeRepository.delete(like);
+	}
 }

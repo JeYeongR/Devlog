@@ -35,4 +35,17 @@ class LikeCommandServiceTest {
 		// then
 		verify(likeRepository, times(1)).save(mockLike);
 	}
+
+	@Test
+	@DisplayName("라이크 정상 삭제")
+	void deleteTest() {
+		// given
+		Like mockLike = mock(Like.class);
+
+		// when
+		likeCommandService.delete(mockLike);
+
+		// then
+		verify(likeRepository, times(1)).delete(mockLike);
+	}
 }

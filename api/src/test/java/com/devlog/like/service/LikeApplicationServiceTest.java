@@ -36,7 +36,7 @@ class LikeApplicationServiceTest {
 
 	@Test
 	@DisplayName("라이크 성공(생성)")
-	void followTest() {
+	void likeTest() {
 		// given
 		Long mockPostId = 1L;
 		Post mockPost = mock(Post.class);
@@ -56,7 +56,7 @@ class LikeApplicationServiceTest {
 
 	@Test
 	@DisplayName("이미 있는 라이크 시도")
-	void followTestConflict() {
+	void likeTestConflict() {
 		// given
 		Long mockPostId = 1L;
 		Post mockPost = mock(Post.class);
@@ -71,5 +71,45 @@ class LikeApplicationServiceTest {
 		verify(postQueryService, times(1)).findPostById(mockPostId);
 		verify(likeQueryService, times(1)).findLikeByUserAndPost(mockUser, mockPost);
 		verify(likeCommandService, times(0)).save(any(Like.class));
+	}
+
+	@Test
+	@DisplayName("언라이크 성공(삭제)")
+	void unlikeTest() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+		User mockUser = mock(User.class);
+		Like mockLike = mock(Like.class);
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+		when(likeQueryService.findLikeByUserAndPost(mockUser, mockPost)).thenReturn(Optional.of(mockLike));
+
+		// when
+		likeApplicationService.unlike(mockUser, mockPostId);
+
+		// then
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+		verify(likeQueryService, times(1)).findLikeByUserAndPost(mockUser, mockPost);
+		verify(likeCommandService, times(1)).delete(mockLike);
+	}
+
+	@Test
+	@DisplayName("존재하지 않는 언라이크 시도")
+	void unlikeTestNotFound() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+		User mockUser = mock(User.class);
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+		when(likeQueryService.findLikeByUserAndPost(mockUser, mockPost)).thenReturn(Optional.empty());
+
+		// when || then
+		assertThatThrownBy(() -> likeApplicationService.unlike(mockUser, mockPostId)).isInstanceOf(ApiException.class);
+
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+		verify(likeQueryService, times(1)).findLikeByUserAndPost(mockUser, mockPost);
+		verify(likeCommandService, times(0)).delete(any(Like.class));
 	}
 }
