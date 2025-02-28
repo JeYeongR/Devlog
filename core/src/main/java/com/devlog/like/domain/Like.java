@@ -1,4 +1,4 @@
-package com.devlog.domain;
+package com.devlog.like.domain;
 
 import com.devlog.post.domain.Post;
 import com.devlog.user.domain.User;
@@ -32,4 +32,11 @@ public class Like {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "posts_id")
 	private Post post;
+
+	public static Like create(User user, Post post) {
+		Like like = new Like();
+		like.user = user;
+		like.post = post;
+		return like;
+	}
 }
