@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.devlog.exception.ApiException;
 import com.devlog.like.domain.Like;
+import com.devlog.like.response.LikeCountResponse;
 import com.devlog.post.domain.Post;
 import com.devlog.post.service.PostQueryService;
 import com.devlog.user.domain.User;
@@ -111,5 +112,25 @@ class LikeApplicationServiceTest {
 		verify(postQueryService, times(1)).findPostById(mockPostId);
 		verify(likeQueryService, times(1)).findLikeByUserAndPost(mockUser, mockPost);
 		verify(likeCommandService, times(0)).delete(any(Like.class));
+	}
+
+	@Test
+	@DisplayName("라이크 수 정상 조회")
+	void findLikeCountTest() {
+		// given
+		Long mockPostId = 1L;
+		Post mockPost = mock(Post.class);
+		int mockCount = 1;
+
+		when(postQueryService.findPostById(mockPostId)).thenReturn(mockPost);
+		when(likeQueryService.findLikeCount(mockPost)).thenReturn(mockCount);
+
+		// when
+		LikeCountResponse result = likeApplicationService.findLikeCount(mockPostId);
+
+		// then
+		assertThat(result).isEqualTo(LikeCountResponse.from(mockCount));
+		verify(postQueryService, times(1)).findPostById(mockPostId);
+		verify(likeQueryService, times(1)).findLikeCount(mockPost);
 	}
 }

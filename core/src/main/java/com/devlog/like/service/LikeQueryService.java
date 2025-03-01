@@ -22,4 +22,8 @@ public class LikeQueryService {
 	public Optional<Like> findLikeByUserAndPost(User user, Post post) {
 		return likeRepository.findByUserAndPost(user, post);
 	}
+
+	public int findLikeCount(Post post) {
+		return likeRepository.countByPost(post);
+	}
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorType;
 import com.devlog.like.domain.Like;
+import com.devlog.like.response.LikeCountResponse;
 import com.devlog.post.domain.Post;
 import com.devlog.post.service.PostQueryService;
 import com.devlog.user.domain.User;
@@ -40,5 +41,13 @@ public class LikeApplicationService {
 			.orElseThrow(() -> new ApiException("좋아요를 누르지 않은 게시물입니다.", ErrorType.NOT_FOUND, HttpStatus.NOT_FOUND));
 
 		likeCommandService.delete(like);
+	}
+
+	public LikeCountResponse findLikeCount(Long postId) {
+		Post post = postQueryService.findPostById(postId);
+
+		int count = likeQueryService.findLikeCount(post);
+
+		return LikeCountResponse.from(count);
 	}
 }

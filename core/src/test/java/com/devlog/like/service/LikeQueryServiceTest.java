@@ -43,4 +43,21 @@ class LikeQueryServiceTest {
 		assertThat(result).isPresent().contains(mockLike);
 		verify(likeRepository, times(1)).findByUserAndPost(mockUser, mockPost);
 	}
+
+	@Test
+	@DisplayName("포스트로 라이크 수 조회")
+	void findLikeCountTest() {
+		// given
+		Post mockPost = mock(Post.class);
+		int mockCount = 1;
+
+		when(likeRepository.countByPost(mockPost)).thenReturn(mockCount);
+
+		// when
+		int result = likeQueryService.findLikeCount(mockPost);
+
+		// then
+		assertThat(result).isEqualTo(mockCount);
+		verify(likeRepository, times(1)).countByPost(mockPost);
+	}
 }

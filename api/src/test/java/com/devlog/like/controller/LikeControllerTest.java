@@ -14,6 +14,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.devlog.like.response.LikeCountResponse;
 import com.devlog.like.service.LikeApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,6 +60,19 @@ class LikeControllerTest {
 
 		// when || then
 		mockMvc.perform(delete("/v1/posts/{postId}/likes", mockPostId))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("GET /v1/posts/{postId}/likes 라이크 수 조회")
+	void findLikeCountTest() throws Exception {
+		// given
+		Long mockPostId = 1L;
+
+		given(likeApplicationService.findLikeCount(mockPostId)).willReturn(mock(LikeCountResponse.class));
+
+		// when || then
+		mockMvc.perform(get("/v1/posts/{postId}/likes", mockPostId))
 			.andExpect(status().isOk());
 	}
 }
