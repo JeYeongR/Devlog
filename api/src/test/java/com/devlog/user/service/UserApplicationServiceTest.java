@@ -64,6 +64,7 @@ class UserApplicationServiceTest {
 		verify(userQueryService, times(1)).findUser(response.socialProviderId());
 		verify(userCommandService, times(1)).save(any(User.class));
 		verify(tokenIssueService, times(1)).createTokens(mockUser.getId());
+		verify(mockUser, times(1)).updateToken(mockToken);
 	}
 
 	@Test
@@ -94,6 +95,7 @@ class UserApplicationServiceTest {
 		verify(userQueryService, times(1)).findUser(response.socialProviderId());
 		verify(userCommandService, never()).save(any());
 		verify(tokenIssueService, times(1)).createTokens(1L);
+		verify(mockUser, times(1)).updateToken(mockToken);
 	}
 
 	@Test
