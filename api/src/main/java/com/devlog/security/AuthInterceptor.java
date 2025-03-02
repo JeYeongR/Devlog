@@ -28,16 +28,19 @@ public class AuthInterceptor implements HandlerInterceptor {
 		String authorization = request.getHeader("Authorization");
 		Long userId = null;
 
+		if (isAuthRequired && authorization == null) {
+			throw new ApiException("Authorization 헤더 필요", ErrorType.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+		}
+
 		try {
 			if (authorization != null) {
 				String token = getBearerToken(authorization);
 				userId = jwtProvider.getUserIdFromToken(token);
-			} else if (isAuthRequired) {
-				throw new ApiException("Authorization 헤더 필요", ErrorType.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
 			}
 		} catch (ApiException e) {
-			if (isAuthRequired)
+			if (isAuthRequired) {
 				throw e;
+			}
 		} catch (Exception e) {
 			if (isAuthRequired) {
 				throw new ApiException("토큰 검증 실패", ErrorType.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
@@ -57,8 +60,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 	}
 
 	private boolean isAuthRequired(Object handler) {
-		if (handler instanceof HandlerMethod) {
-			HandlerMethod handlerMethod = (HandlerMethod)handler;
+		if (handler instanceof HandlerMethod handlerMethod) {
 			return handlerMethod.getMethodAnnotation(AuthRequired.class) != null
 				|| handlerMethod.getBeanType().getAnnotation(AuthRequired.class) != null;
 		}
