@@ -95,4 +95,17 @@ class UserApplicationServiceTest {
 		verify(userCommandService, never()).save(any());
 		verify(tokenIssueService, times(1)).createTokens(1L);
 	}
+
+	@Test
+	@DisplayName("사용자 로그아웃")
+	void logoutTest() {
+		// given
+		User mockUser = mock(User.class);
+
+		// when
+		userApplicationService.logout(mockUser);
+
+		// then
+		verify(mockUser, times(1)).deleteToken();
+	}
 }

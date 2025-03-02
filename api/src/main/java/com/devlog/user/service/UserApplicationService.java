@@ -39,4 +39,9 @@ public class UserApplicationService {
 
 		return TokenResponse.from(token);
 	}
+
+	@Transactional
+	public void logout(User user) {
+		user.deleteToken();
+	}
 }

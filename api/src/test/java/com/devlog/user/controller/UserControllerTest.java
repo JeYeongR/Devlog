@@ -14,6 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.devlog.user.domain.Token;
+import com.devlog.user.domain.User;
 import com.devlog.user.response.TokenResponse;
 import com.devlog.user.service.UserApplicationService;
 
@@ -44,6 +45,19 @@ class UserControllerTest {
 
 		// when | then
 		mockMvc.perform(get("/v1/users/auth/callback").param("code", code))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("POST /v1/users/auth/logout 로그아웃")
+	void logoutTest() throws Exception {
+		// given
+		User mockUser = mock(User.class);
+
+		willDoNothing().given(userApplicationService).logout(mockUser);
+
+		// when | then
+		mockMvc.perform(post("/v1/users/auth/logout"))
 			.andExpect(status().isOk());
 	}
 }

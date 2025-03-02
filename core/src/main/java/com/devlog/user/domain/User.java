@@ -43,7 +43,7 @@ public class User {
 	@Column(nullable = false)
 	private String profileImageUrl;
 
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
 	@JoinColumn(name = "token_id")
 	private Token token;
 
@@ -67,5 +67,9 @@ public class User {
 
 	public void updateToken(Token token) {
 		this.token = token;
+	}
+
+	public void deleteToken() {
+		this.token = null;
 	}
 }
