@@ -32,6 +32,9 @@ class UserApplicationServiceTest {
 	@Mock
 	TokenIssueService tokenIssueService;
 
+	@Mock
+	TokenQueryService tokenQueryService;
+
 	@InjectMocks
 	UserApplicationService userApplicationService;
 
@@ -109,5 +112,34 @@ class UserApplicationServiceTest {
 
 		// then
 		verify(mockUser, times(1)).deleteToken();
+	}
+
+	@Test
+	@DisplayName("토큰 재발급")
+	void refreshTokenTest() {
+		// given
+		String mockAccessToken = "Bearer access";
+		String mockRefreshToken = "Bearer refresh";
+		String strippedAccessToken = mockAccessToken.substring("Bearer ".length());
+		String strippedRefreshToken = mockRefreshToken.substring("Bearer ".length());
+
+		Token mockToken = mock(Token.class);
+		User mockUser = mock(User.class);
+		when(mockToken.getUser()).thenReturn(mockUser);
+
+		Token mockNewToken = mock(Token.class);
+
+		when(tokenQueryService.findToken(strippedAccessToken, strippedRefreshToken)).thenReturn(mockToken);
+		when(tokenIssueService.createTokens(mockUser.getId())).thenReturn(mockNewToken);
+
+		// when
+		TokenResponse result = userApplicationService.refreshToken(mockAccessToken, mockRefreshToken);
+
+		// then
+		assertThat(result).isEqualTo(TokenResponse.from(mockNewToken));
+		verify(tokenQueryService, times(1)).findToken(strippedAccessToken, strippedRefreshToken);
+		verify(mockToken, times(1)).getUser();
+		verify(tokenIssueService, times(1)).createTokens(mockUser.getId());
+		verify(mockUser, times(1)).updateToken(mockNewToken);
 	}
 }

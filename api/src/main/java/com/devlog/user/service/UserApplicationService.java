@@ -20,6 +20,7 @@ public class UserApplicationService {
 	private final UserQueryService userQueryService;
 	private final AuthService authService;
 	private final TokenIssueService tokenIssueService;
+	private final TokenQueryService tokenQueryService;
 
 	@Transactional
 	public TokenResponse login(String code) {
@@ -43,5 +44,20 @@ public class UserApplicationService {
 	@Transactional
 	public void logout(User user) {
 		user.deleteToken();
+	}
+
+	private static String stripBearerPrefix(String token) {
+		return token.substring("Bearer ".length());
+	}
+
+	@Transactional
+	public TokenResponse refreshToken(String accessToken, String refreshToken) {
+		Token token = tokenQueryService.findToken(stripBearerPrefix(accessToken), stripBearerPrefix(refreshToken));
+
+		User user = token.getUser();
+		Token newToken = tokenIssueService.createTokens(user.getId());
+		user.updateToken(newToken);
+
+		return TokenResponse.from(newToken);
 	}
 }

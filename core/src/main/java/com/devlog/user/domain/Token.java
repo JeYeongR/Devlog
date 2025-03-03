@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,6 +34,9 @@ public class Token {
 
 	@Column(nullable = false)
 	private LocalDateTime modifiedAt;
+
+	@OneToOne(mappedBy = "token")
+	private User user;
 
 	public static Token create(String accessToken, String refreshToken) {
 		Token token = new Token();

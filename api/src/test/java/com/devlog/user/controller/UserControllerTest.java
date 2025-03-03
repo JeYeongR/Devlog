@@ -60,4 +60,21 @@ class UserControllerTest {
 		mockMvc.perform(post("/v1/users/auth/logout"))
 			.andExpect(status().isOk());
 	}
+
+	@Test
+	@DisplayName("GET /v1/users/auth/reissue 토큰 재발급")
+	void reissueTokenTest() throws Exception {
+		// given
+		String mockAccessToken = "Bearer access";
+		String mockRefreshToken = "Bearer refresh";
+		TokenResponse mockTokenResponse = mock(TokenResponse.class);
+
+		given(userApplicationService.refreshToken(mockAccessToken, mockRefreshToken)).willReturn(mockTokenResponse);
+
+		// when | then
+		mockMvc.perform(get("/v1/users/auth/reissue")
+				.header("Authorization", mockAccessToken)
+				.header("Refresh-Token", mockRefreshToken))
+			.andExpect(status().isOk());
+	}
 }
