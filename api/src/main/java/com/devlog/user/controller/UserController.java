@@ -12,6 +12,7 @@ import com.devlog.security.AuthRequired;
 import com.devlog.security.LoginUser;
 import com.devlog.user.domain.User;
 import com.devlog.user.response.TokenResponse;
+import com.devlog.user.response.UserDetailResponse;
 import com.devlog.user.service.UserApplicationService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,14 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 
 	private final UserApplicationService userApplicationService;
+
+	@AuthRequired
+	@GetMapping
+	public ResponseEntity<UserDetailResponse> findUser(@LoginUser User user) {
+		UserDetailResponse response = userApplicationService.findUser(user);
+
+		return ResponseEntity.ok(response);
+	}
 
 	@GetMapping("/auth/callback")
 	public ResponseEntity<TokenResponse> callback(@RequestParam String code) {

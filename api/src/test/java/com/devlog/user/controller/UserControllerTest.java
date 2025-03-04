@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;
 import com.devlog.user.response.TokenResponse;
+import com.devlog.user.response.UserDetailResponse;
 import com.devlog.user.service.UserApplicationService;
 
 @WebMvcTest(
@@ -32,6 +33,19 @@ class UserControllerTest {
 
 	@MockitoBean
 	UserApplicationService userApplicationService;
+
+	@Test
+	@DisplayName("GET /v1/users 유저 단건 조회")
+	void findUserTest() throws Exception {
+		// given
+		User mockUser = mock(User.class);
+
+		given(userApplicationService.findUser(mockUser)).willReturn(mock(UserDetailResponse.class));
+
+		// when | then
+		mockMvc.perform(get("/v1/users"))
+			.andExpect(status().isOk());
+	}
 
 	@Test
 	@DisplayName("GET /v1/users/auth/callback 소셜로그인 콜백")

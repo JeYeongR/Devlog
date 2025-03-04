@@ -7,6 +7,7 @@ import com.devlog.external.github.OauthUserResponse;
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;
 import com.devlog.user.response.TokenResponse;
+import com.devlog.user.response.UserDetailResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,10 @@ public class UserApplicationService {
 	private final AuthService authService;
 	private final TokenIssueService tokenIssueService;
 	private final TokenQueryService tokenQueryService;
+
+	private static String stripBearerPrefix(String token) {
+		return token.substring("Bearer ".length());
+	}
 
 	@Transactional
 	public TokenResponse login(String code) {
@@ -46,10 +51,6 @@ public class UserApplicationService {
 		user.deleteToken();
 	}
 
-	private static String stripBearerPrefix(String token) {
-		return token.substring("Bearer ".length());
-	}
-
 	@Transactional
 	public TokenResponse refreshToken(String accessToken, String refreshToken) {
 		Token token = tokenQueryService.findToken(stripBearerPrefix(accessToken), stripBearerPrefix(refreshToken));
@@ -59,5 +60,10 @@ public class UserApplicationService {
 		user.updateToken(newToken);
 
 		return TokenResponse.from(newToken);
+	}
+
+	@Transactional(readOnly = true)
+	public UserDetailResponse findUser(User user) {
+		return UserDetailResponse.from(user);
 	}
 }

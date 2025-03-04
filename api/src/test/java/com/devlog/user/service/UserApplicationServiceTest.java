@@ -16,6 +16,7 @@ import com.devlog.external.github.OauthUserResponse;
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;
 import com.devlog.user.response.TokenResponse;
+import com.devlog.user.response.UserDetailResponse;
 
 @ExtendWith(MockitoExtension.class)
 class UserApplicationServiceTest {
@@ -37,6 +38,19 @@ class UserApplicationServiceTest {
 
 	@InjectMocks
 	UserApplicationService userApplicationService;
+
+	@Test
+	@DisplayName("유저 단건 조회")
+	void findUserTest() {
+		// given
+		User mockUser = mock(User.class);
+
+		// when
+		UserDetailResponse result = userApplicationService.findUser(mockUser);
+
+		// then
+		assertThat(result).isEqualTo(UserDetailResponse.from(mockUser));
+	}
 
 	@Test
 	@DisplayName("신규 사용자 로그인")
