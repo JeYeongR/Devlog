@@ -15,8 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.devlog.follow.request.FollowCreateRequest;
-import com.devlog.follow.request.FollowDeleteRequest;
+import com.devlog.follow.dto.request.FollowCreateRequest;
+import com.devlog.follow.dto.request.FollowDeleteRequest;
 import com.devlog.follow.service.FollowApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;

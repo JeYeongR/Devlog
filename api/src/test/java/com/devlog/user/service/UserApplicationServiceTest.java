@@ -15,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.devlog.external.github.OauthUserResponse;
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;
-import com.devlog.user.response.TokenResponse;
-import com.devlog.user.response.UserDetailResponse;
+import com.devlog.user.dto.response.TokenResponse;
+import com.devlog.user.dto.response.UserDetailResponse;
 
 @ExtendWith(MockitoExtension.class)
 class UserApplicationServiceTest {

@@ -1,9 +1,9 @@
 package com.devlog.post.controller;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyLong;
-import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -19,13 +19,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
-import com.devlog.post.request.PostCreateRequest;
-import com.devlog.post.request.PostSearchRequest;
-import com.devlog.post.request.PostUpdateRequest;
-import com.devlog.post.response.PagePostResponse;
-import com.devlog.post.response.PostCreateResponse;
-import com.devlog.post.response.PostDetailResponse;
-import com.devlog.post.response.PostUpdateResponse;
+import com.devlog.post.dto.request.PostCreateRequest;
+import com.devlog.post.dto.request.PostSearchRequest;
+import com.devlog.post.dto.request.PostUpdateRequest;
+import com.devlog.post.dto.response.PagePostResponse;
+import com.devlog.post.dto.response.PostCreateResponse;
+import com.devlog.post.dto.response.PostDetailResponse;
+import com.devlog.post.dto.response.PostUpdateResponse;
 import com.devlog.post.service.PostApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;

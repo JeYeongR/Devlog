@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorType;
 import com.devlog.like.domain.Like;
-import com.devlog.like.response.LikeCountResponse;
+import com.devlog.like.dto.response.LikeCountResponse;
 import com.devlog.post.domain.Post;
 import com.devlog.post.service.PostQueryService;
 import com.devlog.user.domain.User;

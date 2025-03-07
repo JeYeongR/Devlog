@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devlog.comment.request.CommentCreateRequest;
-import com.devlog.comment.request.CommentUpdateRequest;
-import com.devlog.comment.response.CommentResponse;
+import com.devlog.comment.dto.request.CommentCreateRequest;
+import com.devlog.comment.dto.request.CommentUpdateRequest;
+import com.devlog.comment.dto.response.CommentResponse;
 import com.devlog.comment.service.CommentApplicationService;
 import com.devlog.security.AuthRequired;
 import com.devlog.security.LoginUser;

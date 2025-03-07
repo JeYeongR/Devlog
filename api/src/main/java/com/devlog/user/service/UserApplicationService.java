@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devlog.external.github.OauthUserResponse;
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;
-import com.devlog.user.response.TokenResponse;
-import com.devlog.user.response.UserDetailResponse;
+import com.devlog.user.dto.response.TokenResponse;
+import com.devlog.user.dto.response.UserDetailResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

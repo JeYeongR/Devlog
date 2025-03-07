@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;
-import com.devlog.user.response.TokenResponse;
-import com.devlog.user.response.UserDetailResponse;
+import com.devlog.user.dto.response.TokenResponse;
+import com.devlog.user.dto.response.UserDetailResponse;
 import com.devlog.user.service.UserApplicationService;
 
 @WebMvcTest(

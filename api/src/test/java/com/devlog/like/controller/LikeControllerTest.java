@@ -14,7 +14,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.devlog.like.response.LikeCountResponse;
+import com.devlog.like.dto.response.LikeCountResponse;
 import com.devlog.like.service.LikeApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -16,8 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.devlog.comment.request.CommentCreateRequest;
-import com.devlog.comment.request.CommentUpdateRequest;
+import com.devlog.comment.dto.request.CommentCreateRequest;
+import com.devlog.comment.dto.request.CommentUpdateRequest;
 import com.devlog.comment.service.CommentApplicationService;
 import com.devlog.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;

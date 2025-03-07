@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devlog.security.AuthRequired;
 import com.devlog.security.LoginUser;
 import com.devlog.user.domain.User;
-import com.devlog.user.response.TokenResponse;
-import com.devlog.user.response.UserDetailResponse;
+import com.devlog.user.dto.response.TokenResponse;
+import com.devlog.user.dto.response.UserDetailResponse;
 import com.devlog.user.service.UserApplicationService;
 
 import lombok.RequiredArgsConstructor;

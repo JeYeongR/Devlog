@@ -14,10 +14,10 @@ import org.springframework.data.domain.Page;
 import com.devlog.exception.ApiException;
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
-import com.devlog.post.response.PagePostResponse;
-import com.devlog.post.response.PostCreateResponse;
-import com.devlog.post.response.PostDetailResponse;
-import com.devlog.post.response.PostUpdateResponse;
+import com.devlog.post.dto.response.PagePostResponse;
+import com.devlog.post.dto.response.PostCreateResponse;
+import com.devlog.post.dto.response.PostDetailResponse;
+import com.devlog.post.dto.response.PostUpdateResponse;
 import com.devlog.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)

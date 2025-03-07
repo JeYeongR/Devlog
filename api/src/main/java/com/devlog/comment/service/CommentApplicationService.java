@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devlog.comment.domain.Comment;
-import com.devlog.comment.response.CommentResponse;
+import com.devlog.comment.dto.response.CommentResponse;
 import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorType;
 import com.devlog.post.domain.Post;

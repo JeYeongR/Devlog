@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.devlog.comment.domain.Comment;
-import com.devlog.comment.response.CommentResponse;
+import com.devlog.comment.dto.response.CommentResponse;
 import com.devlog.exception.ApiException;
 import com.devlog.post.domain.Post;
 import com.devlog.post.service.PostQueryService;
