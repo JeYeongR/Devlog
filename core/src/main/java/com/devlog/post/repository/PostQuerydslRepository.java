@@ -15,6 +15,8 @@ import org.springframework.util.StringUtils;
 import com.devlog.post.domain.Post;
 import com.devlog.post.domain.VisibilityStatus;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -30,12 +32,27 @@ public class PostQuerydslRepository {
 	}
 
 	public Page<Post> findPostsByCondition(VisibilityStatus visibilityStatus, String query, Pageable pageable) {
-		BooleanBuilder condition = new BooleanBuilder();
-		condition.and(post.visibilityStatus.eq(visibilityStatus));
-		condition.and(post.deletedAt.isNull());
+		BooleanExpression baseCondition = post.visibilityStatus.eq(visibilityStatus)
+			.and(post.deletedAt.isNull());
+
+		BooleanBuilder fullCondition = new BooleanBuilder();
 
 		if (StringUtils.hasLength(query)) {
-			condition.and(post.title.contains(query).or(post.content.contains(query)));
+			BooleanExpression titleMatch = Expressions.numberTemplate(
+				Double.class,
+				"FUNCTION('MATCH_AGAINST_SINGLE', {0}, {1})",
+				post.title, query
+			).gt(0);
+
+			BooleanExpression contentMatch = Expressions.numberTemplate(
+				Double.class,
+				"FUNCTION('MATCH_AGAINST_SINGLE', {0}, {1})",
+				post.content, query
+			).gt(0);
+
+			fullCondition.or(baseCondition.and(titleMatch.or(contentMatch)));
+		} else {
+			fullCondition.and(baseCondition);
 		}
 
 		List<Post> content = queryFactory
@@ -43,7 +60,7 @@ public class PostQuerydslRepository {
 			.distinct()
 			.leftJoin(post.user, user)
 			.fetchJoin()
-			.where(condition)
+			.where(fullCondition)
 			.orderBy(post.createdAt.desc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -53,7 +70,7 @@ public class PostQuerydslRepository {
 			.select(post.count())
 			.from(post)
 			.distinct()
-			.where(condition);
+			.where(fullCondition);
 
 		Pageable newPageable = PageRequest.of(pageable.getPageNumber() + 1, pageable.getPageSize(), pageable.getSort());
 
