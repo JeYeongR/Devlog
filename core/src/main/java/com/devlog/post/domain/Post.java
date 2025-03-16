@@ -1,7 +1,9 @@
 package com.devlog.post.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import com.devlog.like.domain.Like;
 import com.devlog.user.domain.User;
 
 import jakarta.persistence.Column;
@@ -14,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -42,6 +45,9 @@ public class Post {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "users_id")
 	private User user;
+
+	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+	private List<Like> likes;
 
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;

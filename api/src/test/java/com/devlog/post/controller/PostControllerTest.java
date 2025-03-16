@@ -7,6 +7,9 @@ import static org.mockito.BDDMockito.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import com.devlog.post.dto.request.PostUpdateRequest;
 import com.devlog.post.dto.response.PagePostResponse;
 import com.devlog.post.dto.response.PostCreateResponse;
 import com.devlog.post.dto.response.PostDetailResponse;
+import com.devlog.post.dto.response.PostResponse;
 import com.devlog.post.dto.response.PostUpdateResponse;
 import com.devlog.post.service.PostApplicationService;
 import com.devlog.user.domain.User;
@@ -83,6 +87,19 @@ class PostControllerTest {
 				.param("query", mockRequest.query())
 				.param("page", String.valueOf(mockRequest.page()))
 				.param("size", String.valueOf(mockRequest.size())))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("GET /v1/posts/popular 인기 포스트 조회")
+	void findPopularPostsTest() throws Exception {
+		// given
+		List<PostResponse> mockResponseList = new ArrayList<>();
+		given(postApplicationService.findPopularPosts())
+			.willReturn(mockResponseList);
+
+		// when | then
+		mockMvc.perform(get("/v1/posts/popular"))
 			.andExpect(status().isOk());
 	}
 

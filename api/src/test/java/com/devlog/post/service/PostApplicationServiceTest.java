@@ -3,6 +3,9 @@ package com.devlog.post.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +20,7 @@ import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.dto.response.PagePostResponse;
 import com.devlog.post.dto.response.PostCreateResponse;
 import com.devlog.post.dto.response.PostDetailResponse;
+import com.devlog.post.dto.response.PostResponse;
 import com.devlog.post.dto.response.PostUpdateResponse;
 import com.devlog.user.domain.User;
 
@@ -66,6 +70,24 @@ class PostApplicationServiceTest {
 		// then
 		assertThat(result).isEqualTo(PagePostResponse.from(mockPost));
 		verify(postQueryService, times(1)).findPosts(mockQuery, mockPage, mockSize);
+	}
+
+	@Test
+	@DisplayName("인기 포스트 조회")
+	void findPopularPostsTest() {
+		// given
+		List<Post> mockPosts = mock(List.class);
+
+		when(postQueryService.findPopularPosts()).thenReturn(mockPosts);
+
+		// when
+		List<PostResponse> result = postApplicationService.findPopularPosts();
+
+		// then
+		assertThat(result).isEqualTo(mockPosts.stream()
+			.map(PostResponse::from)
+			.collect(Collectors.toList()));
+		verify(postQueryService, times(1)).findPopularPosts();
 	}
 
 	@Test

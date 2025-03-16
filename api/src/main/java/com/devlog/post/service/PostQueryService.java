@@ -1,5 +1,7 @@
 package com.devlog.post.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,10 @@ public class PostQueryService {
 		Pageable pageable = PageRequest.of(page - 1, size);
 
 		return postQuerydslRepository.findPostsByCondition(VisibilityStatus.PUBLIC, query, pageable);
+	}
+
+	public List<Post> findPopularPosts() {
+		return postQuerydslRepository.findPopular10Posts(VisibilityStatus.PUBLIC);
 	}
 
 	public Post findPostById(Long postId) {

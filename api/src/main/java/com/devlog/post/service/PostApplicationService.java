@@ -1,5 +1,8 @@
 package com.devlog.post.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.dto.response.PagePostResponse;
 import com.devlog.post.dto.response.PostCreateResponse;
 import com.devlog.post.dto.response.PostDetailResponse;
+import com.devlog.post.dto.response.PostResponse;
 import com.devlog.post.dto.response.PostUpdateResponse;
 import com.devlog.user.domain.User;
 
@@ -48,6 +52,15 @@ public class PostApplicationService {
 		Page<Post> pagePost = postQueryService.findPosts(query, page, size);
 
 		return PagePostResponse.from(pagePost);
+	}
+
+	@Transactional(readOnly = true)
+	public List<PostResponse> findPopularPosts() {
+		List<Post> posts = postQueryService.findPopularPosts();
+
+		return posts.stream()
+			.map(PostResponse::from)
+			.collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly = true)

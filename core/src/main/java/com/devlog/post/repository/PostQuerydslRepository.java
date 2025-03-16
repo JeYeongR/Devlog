@@ -76,4 +76,17 @@ public class PostQuerydslRepository {
 
 		return PageableExecutionUtils.getPage(content, newPageable, countQuery::fetchOne);
 	}
+
+	public List<Post> findPopular10Posts(VisibilityStatus visibilityStatus) {
+		return queryFactory
+			.selectFrom(post)
+			.distinct()
+			.leftJoin(post.user, user)
+			.fetchJoin()
+			.where(post.visibilityStatus.eq(visibilityStatus)
+				.and(post.deletedAt.isNull()))
+			.orderBy(post.likes.size().desc())
+			.limit(10)
+			.fetch();
+	}
 }

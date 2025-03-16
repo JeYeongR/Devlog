@@ -1,5 +1,7 @@
 package com.devlog.post.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import com.devlog.post.dto.request.PostUpdateRequest;
 import com.devlog.post.dto.response.PagePostResponse;
 import com.devlog.post.dto.response.PostCreateResponse;
 import com.devlog.post.dto.response.PostDetailResponse;
+import com.devlog.post.dto.response.PostResponse;
 import com.devlog.post.dto.response.PostUpdateResponse;
 import com.devlog.post.service.PostApplicationService;
 import com.devlog.security.AuthRequired;
@@ -49,6 +52,13 @@ public class PostController {
 	@GetMapping("/search")
 	public ResponseEntity<PagePostResponse> search(PostSearchRequest request) {
 		PagePostResponse result = postApplicationService.search(request.query(), request.page(), request.size());
+
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/popular")
+	public ResponseEntity<List<PostResponse>> findPopularPosts() {
+		List<PostResponse> result = postApplicationService.findPopularPosts();
 
 		return ResponseEntity.ok(result);
 	}

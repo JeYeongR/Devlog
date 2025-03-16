@@ -3,6 +3,7 @@ package com.devlog.post.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -53,6 +54,24 @@ class PostQueryServiceTest {
 		assertThat(result).isEqualTo(mockPagePost);
 		verify(postQuerydslRepository, times(1))
 			.findPostsByCondition(VisibilityStatus.PUBLIC, mockQuery, mockPageable);
+	}
+
+	@Test
+	@DisplayName("인기 포스트 정상 조회")
+	void findPopularPostsTest() {
+		// given
+		List<Post> mockPosts = mock(List.class);
+
+		when(postQuerydslRepository.findPopular10Posts(VisibilityStatus.PUBLIC))
+			.thenReturn(mockPosts);
+
+		// when
+		List<Post> result = postQueryService.findPopularPosts();
+
+		// then
+		assertThat(result).isEqualTo(mockPosts);
+		verify(postQuerydslRepository, times(1))
+			.findPopular10Posts(VisibilityStatus.PUBLIC);
 	}
 
 	@Test
