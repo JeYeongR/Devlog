@@ -12,6 +12,8 @@ public record PostResponse(
 
 	String author,
 
+	long likeCount,
+
 	LocalDateTime createdAt
 ) {
 
@@ -20,6 +22,7 @@ public record PostResponse(
 			post.getId(),
 			post.getTitle(),
 			post.getUser().getNickname(),
+			post.getLikeCount(),
 			post.getCreatedAt()
 		);
 	}

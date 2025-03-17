@@ -18,6 +18,8 @@ public record PostDetailResponse(
 
 	String author,
 
+	long likeCount,
+
 	boolean isMyPost,
 
 	LocalDateTime createdAt
@@ -32,6 +34,7 @@ public record PostDetailResponse(
 			post.getContent(),
 			post.getVisibilityStatus(),
 			post.getUser().getNickname(),
+			post.getLikeCount(),
 			isMyPost,
 			post.getCreatedAt()
 		);

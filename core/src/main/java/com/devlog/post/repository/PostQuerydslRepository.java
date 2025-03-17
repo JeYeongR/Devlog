@@ -85,7 +85,7 @@ public class PostQuerydslRepository {
 			.fetchJoin()
 			.where(post.visibilityStatus.eq(visibilityStatus)
 				.and(post.deletedAt.isNull()))
-			.orderBy(post.likes.size().desc())
+			.orderBy(post.likeCount.desc())
 			.limit(10)
 			.fetch();
 	}
