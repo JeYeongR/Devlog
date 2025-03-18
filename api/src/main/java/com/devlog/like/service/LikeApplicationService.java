@@ -2,6 +2,7 @@ package com.devlog.like.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorType;
@@ -23,6 +24,7 @@ public class LikeApplicationService {
 	private final LikeQueryService likeQueryService;
 	private final PostQueryService postQueryService;
 
+	@Transactional
 	public void like(User user, Long postId) {
 		Post post = postQueryService.findPostById(postId);
 
@@ -32,8 +34,11 @@ public class LikeApplicationService {
 			});
 
 		likeCommandService.save(Like.create(user, post));
+
+		post.addLikeCount();
 	}
 
+	@Transactional
 	public void unlike(User user, Long postId) {
 		Post post = postQueryService.findPostById(postId);
 
@@ -41,8 +46,11 @@ public class LikeApplicationService {
 			.orElseThrow(() -> new ApiException("좋아요를 누르지 않은 게시물입니다.", ErrorType.NOT_FOUND, HttpStatus.NOT_FOUND));
 
 		likeCommandService.delete(like);
+
+		post.subtractLikeCount();
 	}
 
+	@Transactional(readOnly = true)
 	public LikeCountResponse findLikeCount(Long postId) {
 		Post post = postQueryService.findPostById(postId);
 
