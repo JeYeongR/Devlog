@@ -5,15 +5,18 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorType;
 import com.devlog.post.domain.Post;
+import com.devlog.post.domain.PostDocument;
 import com.devlog.post.domain.VisibilityStatus;
-import com.devlog.post.repository.PostQuerydslRepository;
 import com.devlog.post.repository.PostRepository;
+import com.devlog.post.repository.PostSearchRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,19 +24,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class PostQueryService {
 
-	private final PostQuerydslRepository postQuerydslRepository;
 	private final PostRepository postRepository;
+	private final PostSearchRepository postSearchRepository;
 
-	public Page<Post> findPosts(String query, int page, int size) {
-		Pageable pageable = PageRequest.of(page - 1, size);
+	public Page<PostDocument> findPosts(String query, int page, int size) {
+		Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		String publicStatus = VisibilityStatus.PUBLIC.name();
 
-		return postQuerydslRepository.findPostsByCondition(VisibilityStatus.PUBLIC, query, pageable);
+		if (query == null || query.isBlank()) {
+			return postSearchRepository.findByVisibilityStatus(publicStatus, pageable);
+		}
+
+		return postSearchRepository.findByVisibilityStatusAndTitleContainingOrContentContaining(
+			publicStatus,
+			query,
+			query,
+			pageable);
 	}
 
-	public List<Post> findPopularPosts() {
-		return postQuerydslRepository.findPopular10Posts(VisibilityStatus.PUBLIC);
+	public List<PostDocument> findPopularPosts() {
+		return postSearchRepository.findTop10ByVisibilityStatusOrderByLikeCountDesc(VisibilityStatus.PUBLIC.name());
 	}
 
 	public Post findPostById(Long postId) {

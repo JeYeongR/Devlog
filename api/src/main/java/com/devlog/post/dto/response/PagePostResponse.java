@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import com.devlog.post.domain.Post;
+import com.devlog.post.domain.PostDocument;
 
 public record PagePostResponse(
 
@@ -17,12 +17,12 @@ public record PagePostResponse(
 	List<PostResponse> contents
 ) {
 
-	public static PagePostResponse from(Page<Post> pagePost) {
+	public static PagePostResponse fromDocumentPage(Page<PostDocument> pageDocuments) {
 		return new PagePostResponse(
-			pagePost.getNumber(),
-			pagePost.getSize(),
-			pagePost.getTotalElements(),
-			pagePost.getContent().stream()
+			pageDocuments.getNumber(),
+			pageDocuments.getSize(),
+			pageDocuments.getTotalElements(),
+			pageDocuments.getContent().stream()
 				.map(PostResponse::from)
 				.toList()
 		);

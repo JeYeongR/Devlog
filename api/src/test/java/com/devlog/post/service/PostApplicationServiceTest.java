@@ -1,10 +1,11 @@
 package com.devlog.post.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 
 import com.devlog.exception.ApiException;
 import com.devlog.post.domain.Post;
+import com.devlog.post.domain.PostDocument;
 import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.dto.response.PagePostResponse;
 import com.devlog.post.dto.response.PostCreateResponse;
@@ -60,15 +62,15 @@ class PostApplicationServiceTest {
 		String mockQuery = "test";
 		int mockPage = 1;
 		int mockSize = 10;
-		Page<Post> mockPost = mock(Page.class);
+		Page<PostDocument> mockDocuments = mock(Page.class);
 
-		when(postQueryService.findPosts(mockQuery, mockPage, mockSize)).thenReturn(mockPost);
+		when(postQueryService.findPosts(mockQuery, mockPage, mockSize)).thenReturn(mockDocuments);
 
 		// when
 		PagePostResponse result = postApplicationService.search(mockQuery, mockPage, mockSize);
 
 		// then
-		assertThat(result).isEqualTo(PagePostResponse.from(mockPost));
+		assertThat(result).isEqualTo(PagePostResponse.fromDocumentPage(mockDocuments));
 		verify(postQueryService, times(1)).findPosts(mockQuery, mockPage, mockSize);
 	}
 
@@ -76,17 +78,22 @@ class PostApplicationServiceTest {
 	@DisplayName("인기 포스트 조회")
 	void findPopularPostsTest() {
 		// given
-		List<Post> mockPosts = mock(List.class);
-
-		when(postQueryService.findPopularPosts()).thenReturn(mockPosts);
+		List<PostDocument> mockDocuments = new ArrayList<>();
+		PostDocument mockDocument = mock(PostDocument.class);
+		mockDocuments.add(mockDocument);
+		
+		when(mockDocument.getPostId()).thenReturn(1L);
+		when(mockDocument.getTitle()).thenReturn("Test Title");
+		when(mockDocument.getUserName()).thenReturn("Test User");
+		when(mockDocument.getLikeCount()).thenReturn(10L);
+		
+		when(postQueryService.findPopularPosts()).thenReturn(mockDocuments);
 
 		// when
 		List<PostResponse> result = postApplicationService.findPopularPosts();
 
 		// then
-		assertThat(result).isEqualTo(mockPosts.stream()
-			.map(PostResponse::from)
-			.collect(Collectors.toList()));
+		assertThat(result).hasSize(mockDocuments.size());
 		verify(postQueryService, times(1)).findPopularPosts();
 	}
 
@@ -211,6 +218,7 @@ class PostApplicationServiceTest {
 
 		// then
 		verify(postQueryService, times(1)).findPostById(mockPostId);
+		verify(postCommandService, times(1)).deleteFromElastic(mockPostId);
 	}
 
 	@Test

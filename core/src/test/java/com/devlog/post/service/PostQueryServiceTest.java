@@ -15,12 +15,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.devlog.exception.ApiException;
 import com.devlog.post.domain.Post;
+import com.devlog.post.domain.PostDocument;
 import com.devlog.post.domain.VisibilityStatus;
-import com.devlog.post.repository.PostQuerydslRepository;
 import com.devlog.post.repository.PostRepository;
+import com.devlog.post.repository.PostSearchRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PostQueryServiceTest {
@@ -29,49 +31,75 @@ class PostQueryServiceTest {
 	PostRepository postRepository;
 
 	@Mock
-	PostQuerydslRepository postQuerydslRepository;
+	PostSearchRepository postSearchRepository;
 
 	@InjectMocks
 	PostQueryService postQueryService;
 
 	@Test
-	@DisplayName("포스트 아이디로 포스트 정상 조회")
-	void findPostsTest() {
+	@DisplayName("포스트 쿼리로 검색")
+	void findPostsTestWithQuery() {
 		// given
 		String mockQuery = "test";
 		int mockPage = 1;
 		int mockSize = 10;
-		Pageable mockPageable = PageRequest.of(mockPage - 1, mockSize);
-		Page<Post> mockPagePost = mock(Page.class);
+		Pageable mockPageable = PageRequest.of(mockPage - 1, mockSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<PostDocument> mockPagePost = mock(Page.class);
 
-		when(postQuerydslRepository.findPostsByCondition(VisibilityStatus.PUBLIC, mockQuery, mockPageable))
+		when(postSearchRepository.findByVisibilityStatusAndTitleContainingOrContentContaining(
+			VisibilityStatus.PUBLIC.name(), mockQuery, mockQuery, mockPageable))
 			.thenReturn(mockPagePost);
 
 		// when
-		Page<Post> result = postQueryService.findPosts(mockQuery, mockPage, mockSize);
+		Page<PostDocument> result = postQueryService.findPosts(mockQuery, mockPage, mockSize);
 
 		// then
 		assertThat(result).isEqualTo(mockPagePost);
-		verify(postQuerydslRepository, times(1))
-			.findPostsByCondition(VisibilityStatus.PUBLIC, mockQuery, mockPageable);
+		verify(postSearchRepository, times(1))
+			.findByVisibilityStatusAndTitleContainingOrContentContaining(
+				VisibilityStatus.PUBLIC.name(), mockQuery, mockQuery, mockPageable);
+	}
+
+	@Test
+	@DisplayName("포스트 검색")
+	void findPostsTest() {
+		// given
+		int mockPage = 1;
+		int mockSize = 10;
+		Pageable mockPageable = PageRequest.of(mockPage - 1, mockSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<PostDocument> mockPagePost = mock(Page.class);
+
+		when(postSearchRepository.findByVisibilityStatus(
+			VisibilityStatus.PUBLIC.name(), mockPageable))
+			.thenReturn(mockPagePost);
+
+		// when
+		Page<PostDocument> result = postQueryService.findPosts(null, mockPage, mockSize);
+
+		// then
+		assertThat(result).isEqualTo(mockPagePost);
+		verify(postSearchRepository, times(1))
+			.findByVisibilityStatus(
+				VisibilityStatus.PUBLIC.name(), mockPageable);
 	}
 
 	@Test
 	@DisplayName("인기 포스트 정상 조회")
 	void findPopularPostsTest() {
 		// given
-		List<Post> mockPosts = mock(List.class);
+		List<PostDocument> mockPosts = mock(List.class);
 
-		when(postQuerydslRepository.findPopular10Posts(VisibilityStatus.PUBLIC))
+		when(postSearchRepository.findTop10ByVisibilityStatusOrderByLikeCountDesc(
+			VisibilityStatus.PUBLIC.name()))
 			.thenReturn(mockPosts);
 
 		// when
-		List<Post> result = postQueryService.findPopularPosts();
+		List<PostDocument> result = postQueryService.findPopularPosts();
 
 		// then
 		assertThat(result).isEqualTo(mockPosts);
-		verify(postQuerydslRepository, times(1))
-			.findPopular10Posts(VisibilityStatus.PUBLIC);
+		verify(postSearchRepository, times(1))
+			.findTop10ByVisibilityStatusOrderByLikeCountDesc(VisibilityStatus.PUBLIC.name());
 	}
 
 	@Test

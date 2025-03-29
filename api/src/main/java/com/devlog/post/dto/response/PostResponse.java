@@ -1,8 +1,6 @@
 package com.devlog.post.dto.response;
 
-import java.time.LocalDateTime;
-
-import com.devlog.post.domain.Post;
+import com.devlog.post.domain.PostDocument;
 
 public record PostResponse(
 
@@ -14,16 +12,16 @@ public record PostResponse(
 
 	long likeCount,
 
-	LocalDateTime createdAt
+	String createdAt
 ) {
 
-	public static PostResponse from(Post post) {
+	public static PostResponse from(PostDocument document) {
 		return new PostResponse(
-			post.getId(),
-			post.getTitle(),
-			post.getUser().getNickname(),
-			post.getLikeCount(),
-			post.getCreatedAt()
+			document.getPostId(),
+			document.getTitle(),
+			document.getUserName(),
+			document.getLikeCount(),
+			document.getCreatedAt()
 		);
 	}
 }

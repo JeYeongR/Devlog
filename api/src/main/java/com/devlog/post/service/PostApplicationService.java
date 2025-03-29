@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devlog.exception.ApiException;
 import com.devlog.exception.ErrorType;
 import com.devlog.post.domain.Post;
+import com.devlog.post.domain.PostDocument;
 import com.devlog.post.domain.VisibilityStatus;
 import com.devlog.post.dto.response.PagePostResponse;
 import com.devlog.post.dto.response.PostCreateResponse;
@@ -49,16 +50,16 @@ public class PostApplicationService {
 
 	@Transactional(readOnly = true)
 	public PagePostResponse search(String query, int page, int size) {
-		Page<Post> pagePost = postQueryService.findPosts(query, page, size);
+		Page<PostDocument> pageDocuments = postQueryService.findPosts(query, page, size);
 
-		return PagePostResponse.from(pagePost);
+		return PagePostResponse.fromDocumentPage(pageDocuments);
 	}
 
 	@Transactional(readOnly = true)
 	public List<PostResponse> findPopularPosts() {
-		List<Post> posts = postQueryService.findPopularPosts();
+		List<PostDocument> documents = postQueryService.findPopularPosts();
 
-		return posts.stream()
+		return documents.stream()
 			.map(PostResponse::from)
 			.collect(Collectors.toList());
 	}
@@ -106,5 +107,6 @@ public class PostApplicationService {
 		}
 
 		post.delete();
+		postCommandService.deleteFromElastic(postId);
 	}
 }
