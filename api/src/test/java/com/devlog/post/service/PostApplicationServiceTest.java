@@ -81,12 +81,12 @@ class PostApplicationServiceTest {
 		List<PostDocument> mockDocuments = new ArrayList<>();
 		PostDocument mockDocument = mock(PostDocument.class);
 		mockDocuments.add(mockDocument);
-		
+
 		when(mockDocument.getPostId()).thenReturn(1L);
 		when(mockDocument.getTitle()).thenReturn("Test Title");
 		when(mockDocument.getUserName()).thenReturn("Test User");
 		when(mockDocument.getLikeCount()).thenReturn(10L);
-		
+
 		when(postQueryService.findPopularPosts()).thenReturn(mockDocuments);
 
 		// when

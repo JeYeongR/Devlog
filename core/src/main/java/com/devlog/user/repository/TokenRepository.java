@@ -8,5 +8,5 @@ import com.devlog.user.domain.Token;
 
 public interface TokenRepository extends JpaRepository<Token, Long> {
 
-	Optional<Token> findByAccessTokenAndRefreshToken(String accessToken ,String refreshToken);
+	Optional<Token> findByAccessTokenAndRefreshToken(String accessToken, String refreshToken);
 }
