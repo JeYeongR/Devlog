@@ -3,5 +3,5 @@ spring:
     active: local
   config:
     import:
-     - application-infra.yml
-     - application-core.yml
+      - application-infra.yml
+      - application-core.yml

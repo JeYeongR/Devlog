@@ -10,6 +10,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
+  elasticsearch:
+    uris: http://localhost:9200
   jpa:
     hibernate:
       ddl-auto: validate
