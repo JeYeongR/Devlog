@@ -3,6 +3,7 @@ package com.devlog.user.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.devlog.external.github.AuthService;
 import com.devlog.external.github.OauthUserResponse;
 import com.devlog.user.domain.Token;
 import com.devlog.user.domain.User;

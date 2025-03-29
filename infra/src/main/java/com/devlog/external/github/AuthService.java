@@ -1,9 +1,6 @@
-package com.devlog.user.service;
+package com.devlog.external.github;
 
 import org.springframework.stereotype.Service;
-
-import com.devlog.external.github.GithubClient;
-import com.devlog.external.github.OauthUserResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

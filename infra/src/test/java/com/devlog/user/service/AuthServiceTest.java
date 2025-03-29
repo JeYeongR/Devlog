@@ -1,8 +1,8 @@
 package com.devlog.user.service;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.devlog.external.github.AuthService;
 import com.devlog.external.github.GithubClient;
 import com.devlog.external.github.OauthUserResponse;
 
@@ -36,7 +37,7 @@ class AuthServiceTest {
 		OauthUserResponse result = authService.getUserInfo(code);
 
 		//then
-		assertThat(result).isEqualTo(mockResponse);
+		Assertions.assertThat(result).isEqualTo(mockResponse);
 		verify(githubClient, times(1)).getUserInfo(code);
 	}
 }
