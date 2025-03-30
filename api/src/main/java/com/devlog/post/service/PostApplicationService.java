@@ -50,7 +50,9 @@ public class PostApplicationService {
 
 	@Transactional(readOnly = true)
 	public PagePostResponse search(String query, int page, int size) {
-		Page<PostDocument> pageDocuments = postQueryService.findPosts(query, page, size);
+		Page<PostDocument> pageDocuments = (query == null || query.isBlank())
+			? postQueryService.findPosts(page, size)
+			: postQueryService.findPostsByQuery(query, page, size);
 
 		return PagePostResponse.fromDocumentPage(pageDocuments);
 	}

@@ -3,6 +3,7 @@ package com.devlog.post.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,19 +31,25 @@ public class PostQueryService {
 	private final PostRepository postRepository;
 	private final PostSearchRepository postSearchRepository;
 
-	public Page<PostDocument> findPosts(String query, int page, int size) {
+	public Page<PostDocument> findPostsByQuery(String query, int page, int size) {
 		Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 		String publicStatus = VisibilityStatus.PUBLIC.name();
-
-		if (query == null || query.isBlank()) {
-			return postSearchRepository.findByVisibilityStatus(publicStatus, pageable);
-		}
 
 		return postSearchRepository.findByVisibilityStatusAndTitleContainingOrContentContaining(
 			publicStatus,
 			query,
 			query,
 			pageable);
+	}
+
+	public Page<PostDocument> findPosts(int page, int size) {
+		Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		String publicStatus = VisibilityStatus.PUBLIC.name();
+
+		List<PostDocument> postDocuments = postSearchRepository.findByVisibilityStatus(publicStatus, pageable);
+		long totalPostDocument = postSearchRepository.countByVisibilityStatus(publicStatus);
+
+		return new PageImpl<>(postDocuments, pageable, totalPostDocument);
 	}
 
 	public List<PostDocument> findPopularPosts() {

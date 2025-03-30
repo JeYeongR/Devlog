@@ -64,14 +64,32 @@ class PostApplicationServiceTest {
 		int mockSize = 10;
 		Page<PostDocument> mockDocuments = mock(Page.class);
 
-		when(postQueryService.findPosts(mockQuery, mockPage, mockSize)).thenReturn(mockDocuments);
+		when(postQueryService.findPostsByQuery(mockQuery, mockPage, mockSize)).thenReturn(mockDocuments);
 
 		// when
 		PagePostResponse result = postApplicationService.search(mockQuery, mockPage, mockSize);
 
 		// then
 		assertThat(result).isEqualTo(PagePostResponse.fromDocumentPage(mockDocuments));
-		verify(postQueryService, times(1)).findPosts(mockQuery, mockPage, mockSize);
+		verify(postQueryService, times(1)).findPostsByQuery(mockQuery, mockPage, mockSize);
+	}
+
+	@Test
+	@DisplayName("포스트 쿼리로 검색 조회")
+	void searchWithQueryTest() {
+		// given
+		int mockPage = 1;
+		int mockSize = 10;
+		Page<PostDocument> mockDocuments = mock(Page.class);
+
+		when(postQueryService.findPosts(mockPage, mockSize)).thenReturn(mockDocuments);
+
+		// when
+		PagePostResponse result = postApplicationService.search(null, mockPage, mockSize);
+
+		// then
+		assertThat(result).isEqualTo(PagePostResponse.fromDocumentPage(mockDocuments));
+		verify(postQueryService, times(1)).findPosts(mockPage, mockSize);
 	}
 
 	@Test

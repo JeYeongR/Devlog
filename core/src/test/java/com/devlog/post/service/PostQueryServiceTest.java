@@ -3,6 +3,7 @@ package com.devlog.post.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -51,13 +53,16 @@ class PostQueryServiceTest {
 			.thenReturn(mockPagePost);
 
 		// when
-		Page<PostDocument> result = postQueryService.findPosts(mockQuery, mockPage, mockSize);
+		Page<PostDocument> result = postQueryService.findPostsByQuery(mockQuery, mockPage, mockSize);
 
 		// then
 		assertThat(result).isEqualTo(mockPagePost);
 		verify(postSearchRepository, times(1))
 			.findByVisibilityStatusAndTitleContainingOrContentContaining(
-				VisibilityStatus.PUBLIC.name(), mockQuery, mockQuery, mockPageable);
+				VisibilityStatus.PUBLIC.name(),
+				mockQuery,
+				mockQuery,
+				mockPageable);
 	}
 
 	@Test
@@ -67,20 +72,23 @@ class PostQueryServiceTest {
 		int mockPage = 1;
 		int mockSize = 10;
 		Pageable mockPageable = PageRequest.of(mockPage - 1, mockSize, Sort.by(Sort.Direction.DESC, "createdAt"));
-		Page<PostDocument> mockPagePost = mock(Page.class);
+		List<PostDocument> mockListPost = new ArrayList<>();
+		Page<PostDocument> mockPagePost = new PageImpl<>(mockListPost, mockPageable, 0);
 
-		when(postSearchRepository.findByVisibilityStatus(
-			VisibilityStatus.PUBLIC.name(), mockPageable))
-			.thenReturn(mockPagePost);
+		when(postSearchRepository.findByVisibilityStatus(VisibilityStatus.PUBLIC.name(), mockPageable))
+			.thenReturn(mockListPost);
+		when(postSearchRepository.countByVisibilityStatus(VisibilityStatus.PUBLIC.name()))
+			.thenReturn(0L);
 
 		// when
-		Page<PostDocument> result = postQueryService.findPosts(null, mockPage, mockSize);
+		Page<PostDocument> result = postQueryService.findPosts(mockPage, mockSize);
 
 		// then
 		assertThat(result).isEqualTo(mockPagePost);
 		verify(postSearchRepository, times(1))
-			.findByVisibilityStatus(
-				VisibilityStatus.PUBLIC.name(), mockPageable);
+			.findByVisibilityStatus(VisibilityStatus.PUBLIC.name(), mockPageable);
+		verify(postSearchRepository, times(1))
+			.countByVisibilityStatus(VisibilityStatus.PUBLIC.name());
 	}
 
 	@Test

@@ -16,7 +16,9 @@ public interface PostSearchRepository extends ElasticsearchRepository<PostDocume
 		String contentQuery,
 		Pageable pageable);
 
-	Page<PostDocument> findByVisibilityStatus(String visibilityStatus, Pageable pageable);
+	List<PostDocument> findByVisibilityStatus(String visibilityStatus, Pageable pageable);
 
 	List<PostDocument> findTop10ByVisibilityStatusOrderByLikeCountDesc(String visibilityStatus);
+
+	long countByVisibilityStatus(String visibilityStatus);
 }
