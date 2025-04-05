@@ -47,12 +47,16 @@ class PostApplicationServiceTest {
 		when(postCommandService.save(any(Post.class))).thenReturn(mockPost);
 
 		// when
-		PostCreateResponse result = postApplicationService.save("title", "content", VisibilityStatus.PUBLIC,
+		PostCreateResponse result = postApplicationService.save(
+			"title",
+			"content",
+			VisibilityStatus.PUBLIC,
 			mock(User.class));
 
 		// then
 		assertThat(result).isEqualTo(PostCreateResponse.from(mockPost));
 		verify(postCommandService, times(1)).save(any(Post.class));
+		verify(postCommandService, times(1)).saveToElastic(mockPost);
 	}
 
 	@Test
@@ -195,6 +199,7 @@ class PostApplicationServiceTest {
 		// then
 		assertThat(result).isEqualTo(PostUpdateResponse.from(mockPost));
 		verify(postQueryService, times(1)).findPostById(mockPostId);
+		verify(postCommandService, times(1)).saveToElastic(mockPost);
 	}
 
 	@Test

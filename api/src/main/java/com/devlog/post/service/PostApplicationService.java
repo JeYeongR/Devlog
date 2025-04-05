@@ -45,6 +45,8 @@ public class PostApplicationService {
 			user
 		));
 
+		postCommandService.saveToElastic(post);
+
 		return PostCreateResponse.from(post);
 	}
 
@@ -96,6 +98,7 @@ public class PostApplicationService {
 		}
 
 		post.update(title, content, visibilityStatus);
+		postCommandService.saveToElastic(post);
 
 		return PostUpdateResponse.from(post);
 	}

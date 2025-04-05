@@ -21,19 +21,15 @@ public class PostCommandService {
 	private final PostSearchRepository postSearchRepository;
 
 	public Post save(Post post) {
-		Post savedPost = postRepository.save(post);
+		return postRepository.save(post);
+	}
 
-		saveToElastic(savedPost);
-
-		return savedPost;
+	public void saveToElastic(Post post) {
+		PostDocument document = PostDocument.from(post);
+		postSearchRepository.save(document);
 	}
 
 	public void deleteFromElastic(Long postId) {
 		postSearchRepository.deleteById(postId.toString());
-	}
-
-	private void saveToElastic(Post post) {
-		PostDocument document = PostDocument.from(post);
-		postSearchRepository.save(document);
 	}
 }
