@@ -80,7 +80,7 @@ cd devlog
 ./gradlew build
 
 # 실행
-./gradlew :api:bootRun
+./gradlew :api:bootRun --args='--GITHUB_API_CLIENT_ID={깃허브_클라이언트_아이디} --MYSQL_PASSWORD={MySQL_패스워드} --MYSQL_USERNAME={MySQL_유저네임} --GITHUB_API_CLIENT_SECRET={깃허브_클라이언트_시크릿}'
 ```
 
 ## 테스트
