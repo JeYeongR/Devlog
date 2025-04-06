@@ -19,6 +19,7 @@
 - Spring Data JPA
 - Spring Data Elasticsearch
 - MySQL
+- Elasticsearch
 - H2 Database (개발/테스트용)
 - JWT
 
