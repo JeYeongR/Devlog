@@ -14,13 +14,14 @@
 - Spring Boot 3.4.2
 - Gradle
 - JUnit5
-- JaCoCo (테스트 커버리지)
+- JaCoCo
 - Lombok
 - Spring Data JPA
 - Spring Data Elasticsearch
+- Hibernate
 - MySQL
 - Elasticsearch
-- H2 Database (개발/테스트용)
+- H2 Database
 - JWT
 
 ## 모듈 구조
