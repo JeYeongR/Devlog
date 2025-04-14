@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 
 import com.devlog.exception.ApiException;
@@ -24,6 +25,9 @@ import com.devlog.post.dto.response.PostCreateResponse;
 import com.devlog.post.dto.response.PostDetailResponse;
 import com.devlog.post.dto.response.PostResponse;
 import com.devlog.post.dto.response.PostUpdateResponse;
+import com.devlog.post.event.PostCreatedEvent;
+import com.devlog.post.event.PostDeletedEvent;
+import com.devlog.post.event.PostUpdatedEvent;
 import com.devlog.user.domain.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,6 +38,9 @@ class PostApplicationServiceTest {
 
 	@Mock
 	PostQueryService postQueryService;
+	
+	@Mock
+	ApplicationEventPublisher eventPublisher;
 
 	@InjectMocks
 	PostApplicationService postApplicationService;
@@ -56,7 +63,7 @@ class PostApplicationServiceTest {
 		// then
 		assertThat(result).isEqualTo(PostCreateResponse.from(mockPost));
 		verify(postCommandService, times(1)).save(any(Post.class));
-		verify(postCommandService, times(1)).saveToElastic(mockPost);
+		verify(eventPublisher, times(1)).publishEvent(any(PostCreatedEvent.class));
 	}
 
 	@Test
@@ -199,7 +206,7 @@ class PostApplicationServiceTest {
 		// then
 		assertThat(result).isEqualTo(PostUpdateResponse.from(mockPost));
 		verify(postQueryService, times(1)).findPostById(mockPostId);
-		verify(postCommandService, times(1)).saveToElastic(mockPost);
+		verify(eventPublisher, times(1)).publishEvent(any(PostUpdatedEvent.class));
 	}
 
 	@Test
@@ -241,7 +248,7 @@ class PostApplicationServiceTest {
 
 		// then
 		verify(postQueryService, times(1)).findPostById(mockPostId);
-		verify(postCommandService, times(1)).deleteFromElastic(mockPostId);
+		verify(eventPublisher, times(1)).publishEvent(any(PostDeletedEvent.class));
 	}
 
 	@Test

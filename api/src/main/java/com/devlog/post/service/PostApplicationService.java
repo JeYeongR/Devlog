@@ -3,6 +3,7 @@ package com.devlog.post.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ import com.devlog.post.dto.response.PostCreateResponse;
 import com.devlog.post.dto.response.PostDetailResponse;
 import com.devlog.post.dto.response.PostResponse;
 import com.devlog.post.dto.response.PostUpdateResponse;
+import com.devlog.post.event.PostCreatedEvent;
+import com.devlog.post.event.PostDeletedEvent;
+import com.devlog.post.event.PostUpdatedEvent;
 import com.devlog.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +34,7 @@ public class PostApplicationService {
 
 	private final PostCommandService postCommandService;
 	private final PostQueryService postQueryService;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Transactional
 	public PostCreateResponse save(
@@ -45,7 +50,7 @@ public class PostApplicationService {
 			user
 		));
 
-		postCommandService.saveToElastic(post);
+		eventPublisher.publishEvent(new PostCreatedEvent(post));
 
 		return PostCreateResponse.from(post);
 	}
@@ -98,7 +103,7 @@ public class PostApplicationService {
 		}
 
 		post.update(title, content, visibilityStatus);
-		postCommandService.saveToElastic(post);
+		eventPublisher.publishEvent(new PostUpdatedEvent(post));
 
 		return PostUpdateResponse.from(post);
 	}
@@ -112,6 +117,6 @@ public class PostApplicationService {
 		}
 
 		post.delete();
-		postCommandService.deleteFromElastic(postId);
+		eventPublisher.publishEvent(new PostDeletedEvent(postId));
 	}
 }
