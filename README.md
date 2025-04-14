@@ -6,7 +6,7 @@
 
 ## 아키텍처
 
-![CQRS_SYNC.png](CQRS_SYNC.png)
+![CQRS_EVENT.png](CQRS_EVENT.png)
 
 ## 기술 스택
 
